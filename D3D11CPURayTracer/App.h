@@ -1,6 +1,7 @@
 #pragma once
 #include <directxtk/SimpleMath.h>
 #include "Circle.h";
+#include "Sphere.h";
 
 class App {
 public:
@@ -10,6 +11,7 @@ public:
 
 private:
 	DirectX::SimpleMath::Vector2 screen_to_world(DirectX::SimpleMath::Vector2 pos);
+	DirectX::SimpleMath::Vector3 screen_to_world(DirectX::SimpleMath::Vector3 pos);
 
 private:
 	HWND h_wnd = nullptr;
@@ -32,4 +34,5 @@ private:
 	ID3D11SamplerState *sampler = nullptr;
 
 	Circle *circle = nullptr;
+	Sphere *sphere = nullptr;
 };
