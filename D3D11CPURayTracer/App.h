@@ -1,6 +1,7 @@
 #pragma once
 #include <directxtk/SimpleMath.h>
 #include "Circle.h";
+#include "Light.h";
 #include "Sphere.h";
 
 class App {
@@ -32,6 +33,8 @@ private:
 	ID3D11ShaderResourceView *texture_srv = nullptr;
 	std::vector<DirectX::SimpleMath::Vector4> texture_data;
 	ID3D11SamplerState *sampler = nullptr;
+
+	Light *light = nullptr;
 
 	Circle *circle = nullptr;
 	Sphere *sphere = nullptr;

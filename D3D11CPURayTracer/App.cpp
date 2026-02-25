@@ -129,12 +129,15 @@ bool App::init(HWND h_wnd) {
 		return false;
 	}
 
+	// light
+	light = new Light(1.0f, { 0.0f, 1.0f, 0.0f }, { 0.0f, -1.0f, 1.0f });
+
 	// mesh
 	// circle
 	circle = new Circle(0.5f, { 0.0f, 0.0f }, { 1.0f, 0.0f, 0.0f, 1.0f });
 
 	// sphere
-	sphere = new Sphere(0.5f, { 0.0f, 0.0f, 0.5f }, { 1.0f, 1.0f, 1.0f, 1.0f });
+	sphere = new Sphere(0.5f, { 0.0f, 0.0f, 0.5f });
 
 	return true;
 }
@@ -156,13 +159,31 @@ void App::update() {
 		for (int j = 0; j < width; j++) {
 			auto pos_world = screen_to_world({ (float)j, (float)i, 0.0f });
 			Ray ray(pos_world, { 0.0f, 0.0f, 1.0f });
-
 			Hit hit = sphere->intersect(ray);
-
 			if (hit.d < 0.0f) {
 				continue;
 			}
-			texture_data[i * width + j] = sphere->color;
+
+			//https://en.wikipedia.org/wiki/Blinn%E2%80%93Phong_reflection_model
+			auto normal = (hit.pos - sphere->center);
+			normal.Normalize();
+
+			auto light_dir = (light->pos - hit.pos);
+			light_dir.Normalize();
+
+			//auto cam_dir = (DirectX::SimpleMath::Vector3{ 0.0f, 0.0f, -1.0f } - hit.pos);
+			auto cam_dir = DirectX::SimpleMath::Vector3{ 0.0f, 0.0f, -1.0f };
+			cam_dir.Normalize();
+
+			auto halfway = light_dir + cam_dir;
+			halfway.Normalize();
+
+			auto ambient = sphere->ambient;
+			auto diffuse = std::max(normal.Dot(light_dir), 0.0f) * sphere->diffuse;
+			auto specular = std::pow(std::max(normal.Dot(halfway), 0.0f), sphere->shininess) * sphere->specular;
+			auto color = ambient + (diffuse + specular) * light->strength;
+
+			texture_data[i * width + j] = { color.x, color.y, color.z, 1.0f };
 		}
 	}
 
@@ -195,12 +216,12 @@ void App::render() {
 DirectX::SimpleMath::Vector2 App::screen_to_world(DirectX::SimpleMath::Vector2 pos) {
 	float x = pos.x * 2.0f * aspect / (width - 1) - aspect;
 	float y = pos.y * 2.0f / (height - 1) - 1.0f;
-	return { x, y };
+	return { x, -y };
 }
 
 // [0, w - 1] * [0, h - 1] -> [-aspect, aspect] * [-1, 1]
 DirectX::SimpleMath::Vector3 App::screen_to_world(DirectX::SimpleMath::Vector3 pos) {
 	float x = pos.x * 2.0f * aspect / (width - 1) - aspect;
 	float y = pos.y * 2.0f / (height - 1) - 1.0f;
-	return { x, y, 0.0f };
+	return { x, -y, 0.0f };
 }

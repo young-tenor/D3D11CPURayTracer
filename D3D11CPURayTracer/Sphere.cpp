@@ -1,10 +1,9 @@
 #include "pch.h"
 #include "Sphere.h"
 
-Sphere::Sphere(float radius, DirectX::SimpleMath::Vector3 center, DirectX::SimpleMath::Vector4 color)
+Sphere::Sphere(float radius, DirectX::SimpleMath::Vector3 center)
 	: radius(radius)
-	, center(center)
-	, color(color) {
+	, center(center) {
 }
 
 // https://en.wikipedia.org/wiki/Line%E2%80%93sphere_intersection
