@@ -31,7 +31,7 @@ void Shadow::update() {
 
 	ImGui::Separator();
 
-	ImGui::Checkbox("Draw Shadow", &draw_shadow);
+	ImGui::Checkbox("draw shadow", &draw_shadow);
 
 	ImGui::End();
 
