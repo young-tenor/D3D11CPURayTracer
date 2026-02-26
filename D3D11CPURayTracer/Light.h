@@ -3,11 +3,10 @@
 
 class Light {
 public:
-	Light(float strength, DirectX::SimpleMath::Vector3 pos, DirectX::SimpleMath::Vector3 dir);
+	Light(float strength, DirectX::SimpleMath::Vector3 pos);
 
 public:
 	float strength = 1.0f;
 	DirectX::SimpleMath::Vector3 pos;
-	DirectX::SimpleMath::Vector3 dir;
 };
 

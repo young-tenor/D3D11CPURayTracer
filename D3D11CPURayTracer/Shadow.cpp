@@ -10,10 +10,10 @@ bool Shadow::init(HWND h_wnd) {
 	}
 
 	// light
-	light = new Light(1.0f, { 0.0f, 1.0f, 0.0f }, { 0.0f, -1.0f, 1.0f });
+	light = new Light(1.0f, { 0.0f, 1.0f, -1.0f });
 
 	// meshes
-	meshes.push_back(new Sphere(0.5f, { 0.0f, 0.0f, 0.5f }));
+	meshes.push_back(new Sphere(0.5f, { 0.0f, 0.0f, 1.0f }));
 	meshes.push_back(new Rect({ -2.0f, -1.0f, 4.0f }, { 2.0f, -1.0, 4.0f }, { 2.0f, -1.0, 0.0f }, { -2.0f, -1.0, 0.0f }));
 
 	return true;
@@ -63,11 +63,11 @@ void Shadow::update() {
 				continue;
 			}
 
-			auto light_dir = (light->pos - closest_hit.pos);
-			light_dir.Normalize();
+			auto light_vec = light->pos - closest_hit.pos;
+			light_vec.Normalize();
 
 			if (draw_shadow) {
-				Ray shadow_ray(closest_hit.pos + closest_hit.normal * 1e-3f, light_dir);
+				Ray shadow_ray(closest_hit.pos + closest_hit.normal * 1e-3f, light_vec);
 				bool is_shadowed = false;
 				for (auto &mesh : meshes) {
 					Hit hit = mesh->intersect(shadow_ray);
@@ -88,7 +88,7 @@ void Shadow::update() {
 			auto cam_dir = -ray.dir;
 			cam_dir.Normalize();
 
-			auto color = blinn_phong(closest_hit.normal, light_dir, cam_dir, light->strength, closest_mesh);
+			auto color = blinn_phong(closest_hit.normal, light_vec, cam_dir, light->strength, closest_mesh);
 
 			texture_data[i * width + j] = { color.x, color.y, color.z, 1.0f };
 		}

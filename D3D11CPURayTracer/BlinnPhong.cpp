@@ -7,7 +7,7 @@ bool BlinnPhong::init(HWND h_wnd) {
 	}
 
 	// light
-	light = new Light(1.0f, { 0.0f, 1.0f, 0.0f }, { 0.0f, -1.0f, 1.0f });
+	light = new Light(1.0f, { 0.0f, 1.0f, -1.0f });
 
 	// mesh
 	sphere = new Sphere(0.5f, { 0.0f, 0.0f, 0.5f });
@@ -40,7 +40,7 @@ void BlinnPhong::update() {
 	ImGui::Separator();
 
 	ImGui::Text("light");
-	ImGui::DragFloat3("position", &light->pos.x, 0.1f);
+	ImGui::DragFloat3("direction", &light->pos.x, 0.1f);
 	ImGui::SliderFloat("strength", &light->strength, 0.0f, 5.0f);
 
 	ImGui::End();
@@ -57,13 +57,13 @@ void BlinnPhong::update() {
 			if (hit.d < 0.0f) {
 				continue;
 			}
-			auto light_dir = (light->pos - hit.pos);
-			light_dir.Normalize();
+			auto light_vec = light->pos - hit.pos;
+			light_vec.Normalize();
 
 			auto cam_dir = -ray.dir;
 			cam_dir.Normalize();
 
-			auto color = blinn_phong(hit.normal, light_dir, cam_dir, light->strength, sphere);
+			auto color = blinn_phong(hit.normal, light_vec, cam_dir, light->strength, sphere);
 
 			texture_data[i * width + j] = { color.x, color.y, color.z, 1.0f };
 		}

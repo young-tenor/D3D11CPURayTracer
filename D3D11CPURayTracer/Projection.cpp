@@ -7,7 +7,7 @@ bool Projection::init(HWND h_wnd) {
 	}
 
 	// light
-	light = new Light(1.0f, { 0.0f, 1.0f, 0.0f }, { 0.0f, -1.0f, 1.0f });
+	light = new Light(1.0f, { 0.0f, 1.0f, -1.0f });
 
 	// meshes
 	spheres.push_back(new Sphere(0.5f, { -0.25f, 0.0f, 0.5f }, { 1.0f, 0.0f, 0.0f })); // left, front, red
@@ -61,13 +61,13 @@ void Projection::update() {
 					continue;
 				}
 
-				auto light_dir = (light->pos - closest_hit.pos);
-				light_dir.Normalize();
+				auto light_vec = light->pos - closest_hit.pos;
+				light_vec.Normalize();
 
 				auto cam_dir = -ray.dir;
 				cam_dir.Normalize();
 
-				auto color = blinn_phong(closest_hit.normal, light_dir, cam_dir, light->strength, closest_sphere);
+				auto color = blinn_phong(closest_hit.normal, light_vec, cam_dir, light->strength, closest_sphere);
 
 				texture_data[i * width + j] = { color.x, color.y, color.z, 1.0f };
 			} else {
@@ -78,13 +78,13 @@ void Projection::update() {
 						continue;
 					}
 
-					auto light_dir = (light->pos - hit.pos);
-					light_dir.Normalize();
+					auto light_vec = light->pos - hit.pos;
+					light_vec.Normalize();
 
 					auto cam_dir = -ray.dir;
 					cam_dir.Normalize();
 
-					auto color = blinn_phong(hit.normal, light_dir, cam_dir, light->strength, sphere);
+					auto color = blinn_phong(hit.normal, light_vec, cam_dir, light->strength, sphere);
 
 					texture_data[i * width + j] = { color.x, color.y, color.z, 1.0f };
 				}
