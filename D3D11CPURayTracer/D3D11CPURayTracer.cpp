@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "BlinnPhong.h"
+#include "Projection.h"
 
 HINSTANCE hInst;
 HWND hWnd;
@@ -20,7 +21,8 @@ int main() {
 		return -1;
 	}
 
-	auto app = std::make_unique<BlinnPhong>();
+	//auto app = std::make_unique<BlinnPhong>();
+	auto app = std::make_unique<Projection>();
 	if (!app->init(hWnd)) {
 		std::cout << "init() failed." << std::endl;
 		return -1;
