@@ -113,6 +113,8 @@ bool Projection::init(HWND h_wnd) {
 		return false;
 	}
 
+	texture_data.resize(width * height);
+
 	// sampler
 	D3D11_SAMPLER_DESC sampler_desc = { 0 };
 	sampler_desc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
@@ -166,24 +168,39 @@ void Projection::update() {
 
 	ImGui::End();
 
-	texture_data.resize(width * height, { 0.1f, 0.2f, 0.4f, 1.0f });
+	auto clear_color = DirectX::SimpleMath::Vector4{ 0.1f, 0.2f, 0.4f, 1.0f };
+	std::fill(texture_data.begin(), texture_data.end(), clear_color);
 
-	// sphere
 	for (int i = 0; i < height; i++) {
 		for (int j = 0; j < width; j++) {
 			auto pos_world = screen_to_world({ (float)j, (float)i, 0.0f });
-			Ray ray(pos_world, { 0.0f, 0.0f, 1.0f });
-			for (auto &sphere : spheres) {
-				Hit hit = sphere->intersect(ray);
-				if (hit.d < 0.0f) {
+			if (use_perspective) {
+				auto cam_pos = DirectX::SimpleMath::Vector3{ 0.0f, 0.0f, -1.0f };
+				auto ray_dir = pos_world - cam_pos;
+				ray_dir.Normalize();
+				Ray ray(cam_pos, ray_dir);
+
+				Sphere *closest_sphere = nullptr;
+				Hit closest_hit(-1.0f, { 0.0f, 0.0f, -1.0f });
+				float min_d = 100.0f;
+				for (auto &sphere : spheres) {
+					Hit hit = sphere->intersect(ray);
+					if (hit.d < 0.0f || hit.d > min_d) {
+						continue;
+					}
+					closest_sphere = sphere;
+					closest_hit = hit;
+					min_d = hit.d;
+				}
+				if (!closest_sphere) {
 					continue;
 				}
 
 				// https://en.wikipedia.org/wiki/Blinn%E2%80%93Phong_reflection_model
-				auto normal = (hit.pos - sphere->center);
+				auto normal = (closest_hit.pos - closest_sphere->center);
 				normal.Normalize();
 
-				auto light_dir = (light->pos - hit.pos);
+				auto light_dir = (light->pos - closest_hit.pos);
 				light_dir.Normalize();
 
 				auto cam_dir = -ray.dir;
@@ -192,12 +209,40 @@ void Projection::update() {
 				auto halfway = light_dir + cam_dir;
 				halfway.Normalize();
 
-				auto ambient = sphere->ambient;
-				auto diffuse = std::max(normal.Dot(light_dir), 0.0f) * sphere->diffuse;
-				auto specular = std::pow(std::max(normal.Dot(halfway), 0.0f), sphere->shininess) * sphere->specular;
+				auto ambient = closest_sphere->ambient;
+				auto diffuse = std::max(normal.Dot(light_dir), 0.0f) * closest_sphere->diffuse;
+				auto specular = std::pow(std::max(normal.Dot(halfway), 0.0f), closest_sphere->shininess) * closest_sphere->specular;
 				auto color = ambient + (diffuse + specular) * light->strength;
 
 				texture_data[i * width + j] = { color.x, color.y, color.z, 1.0f };
+			} else {
+				Ray ray(pos_world, { 0.0f, 0.0f, 1.0f });
+				for (auto &sphere : spheres) {
+					Hit hit = sphere->intersect(ray);
+					if (hit.d < 0.0f) {
+						continue;
+					}
+
+					// https://en.wikipedia.org/wiki/Blinn%E2%80%93Phong_reflection_model
+					auto normal = (hit.pos - sphere->center);
+					normal.Normalize();
+
+					auto light_dir = (light->pos - hit.pos);
+					light_dir.Normalize();
+
+					auto cam_dir = -ray.dir;
+					cam_dir.Normalize();
+
+					auto halfway = light_dir + cam_dir;
+					halfway.Normalize();
+
+					auto ambient = sphere->ambient;
+					auto diffuse = std::max(normal.Dot(light_dir), 0.0f) * sphere->diffuse;
+					auto specular = std::pow(std::max(normal.Dot(halfway), 0.0f), sphere->shininess) * sphere->specular;
+					auto color = ambient + (diffuse + specular) * light->strength;
+
+					texture_data[i * width + j] = { color.x, color.y, color.z, 1.0f };
+				}
 			}
 		}
 	}
