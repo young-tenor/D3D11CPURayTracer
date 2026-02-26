@@ -35,12 +35,12 @@ void BlinnPhong::update() {
 		sphere->specular.y = sphere->specular.x;
 		sphere->specular.z = sphere->specular.x;
 	}
-	ImGui::SliderFloat("Shininess", &sphere->shininess, 1.0f, 256.0f);
+	ImGui::SliderFloat("shininess", &sphere->shininess, 1.0f, 256.0f);
 
 	ImGui::Separator();
 
 	ImGui::Text("light");
-	ImGui::DragFloat3("direction", &light->pos.x, 0.1f);
+	ImGui::DragFloat3("position", &light->pos.x, 0.1f);
 	ImGui::SliderFloat("strength", &light->strength, 0.0f, 5.0f);
 
 	ImGui::End();
