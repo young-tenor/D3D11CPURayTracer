@@ -3,13 +3,13 @@
 #include "Light.h";
 #include "Sphere.h";
 
-class App {
+class BlinnPhong {
 public:
 	bool init(HWND h_wnd);
 	void update();
 	void render();
 
-private:\
+private:
 	DirectX::SimpleMath::Vector3 screen_to_world(DirectX::SimpleMath::Vector3 pos);
 
 private:

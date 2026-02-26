@@ -1,7 +1,7 @@
 #include "pch.h"
-#include "App.h"
+#include "BlinnPhong.h"
 
-bool App::init(HWND h_wnd) {
+bool BlinnPhong::init(HWND h_wnd) {
 	h_wnd = h_wnd;
 
 	RECT rc;
@@ -149,7 +149,7 @@ bool App::init(HWND h_wnd) {
 	return true;
 }
 
-void App::update() {
+void BlinnPhong::update() {
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
@@ -219,7 +219,7 @@ void App::update() {
 	context->Unmap(texture, 0);
 }
 
-void App::render() {
+void BlinnPhong::render() {
 	const float clear_color[] = { 0.1f, 0.2f, 0.4f, 1.0f };
 	context->ClearRenderTargetView(rtv, clear_color);
 
@@ -243,7 +243,7 @@ void App::render() {
 }
 
 // [0, w - 1] * [0, h - 1] -> [-aspect, aspect] * [-1, 1]
-DirectX::SimpleMath::Vector3 App::screen_to_world(DirectX::SimpleMath::Vector3 pos) {
+DirectX::SimpleMath::Vector3 BlinnPhong::screen_to_world(DirectX::SimpleMath::Vector3 pos) {
 	float x = pos.x * 2.0f * aspect / (width - 1) - aspect;
 	float y = pos.y * 2.0f / (height - 1) - 1.0f;
 	return { x, -y, 0.0f };

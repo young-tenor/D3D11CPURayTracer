@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "App.h"
+#include "BlinnPhong.h"
 
 HINSTANCE hInst;
 HWND hWnd;
@@ -20,7 +20,7 @@ int main() {
 		return -1;
 	}
 
-	auto app = std::make_unique<App>();
+	auto app = std::make_unique<BlinnPhong>();
 	if (!app->init(hWnd)) {
 		std::cout << "init() failed." << std::endl;
 		return -1;
