@@ -2,7 +2,7 @@
 #include "Triangle.h"
 
 Triangle::Triangle(DirectX::SimpleMath::Vector3 v0, DirectX::SimpleMath::Vector3 v1, DirectX::SimpleMath::Vector3 v2)
-    : Mesh()
+    : Object()
     , v0(v0)
     , v1(v1)
     , v2(v2) {

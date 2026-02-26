@@ -57,7 +57,7 @@
     <ClCompile Include="Shadow.cpp">
       <Filter>Source Files\App</Filter>
     </ClCompile>
-    <ClCompile Include="Mesh.cpp">
+    <ClCompile Include="Object.cpp">
       <Filter>Source Files\Object</Filter>
     </ClCompile>
     <ClCompile Include="Rect.cpp">
@@ -86,7 +86,7 @@
     <ClInclude Include="Shadow.h">
       <Filter>Header Files\App</Filter>
     </ClInclude>
-    <ClInclude Include="Mesh.h">
+    <ClInclude Include="Object.h">
       <Filter>Header Files\Object</Filter>
     </ClInclude>
     <ClInclude Include="Rect.h">

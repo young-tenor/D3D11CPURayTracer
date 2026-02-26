@@ -12,9 +12,9 @@ bool Shadow::init(HWND h_wnd) {
 	// light
 	light = new Light(1.0f, { 0.0f, 1.0f, -1.0f });
 
-	// meshes
-	meshes.push_back(new Sphere(0.5f, { 0.0f, 0.0f, 1.0f }));
-	meshes.push_back(new Rect({ -2.0f, -1.0f, 4.0f }, { 2.0f, -1.0, 4.0f }, { 2.0f, -1.0, 0.0f }, { -2.0f, -1.0, 0.0f }));
+	// objects
+	objects.push_back(new Sphere(0.5f, { 0.0f, 0.0f, 1.0f }));
+	objects.push_back(new Rect({ -2.0f, -1.0f, 4.0f }, { 2.0f, -1.0, 4.0f }, { 2.0f, -1.0, 0.0f }, { -2.0f, -1.0, 0.0f }));
 
 	return true;
 }
@@ -35,7 +35,7 @@ void Shadow::update() {
 
 	ImGui::End();
 
-	// meshes
+	// objects
 	auto clear_color = DirectX::SimpleMath::Vector4{ 0.1f, 0.2f, 0.4f, 1.0f };
 	std::fill(texture_data.begin(), texture_data.end(), clear_color);
 
@@ -47,19 +47,19 @@ void Shadow::update() {
 			ray_dir.Normalize();
 			Ray ray(cam_pos, ray_dir);
 
-			Mesh *closest_mesh = nullptr;
+			Object *closest_obj = nullptr;
 			Hit closest_hit(-1.0f, { 0.0f, 0.0f, -1.0f });
 			float min_d = 100.0f;
-			for (auto &mesh : meshes) {
-				Hit hit = mesh->intersect(ray);
+			for (auto &object : objects) {
+				Hit hit = object->intersect(ray);
 				if (hit.d < 0.0f || hit.d > min_d) {
 					continue;
 				}
-				closest_mesh = mesh;
+				closest_obj = object;
 				closest_hit = hit;
 				min_d = hit.d;
 			}
-			if (!closest_mesh) {
+			if (!closest_obj) {
 				continue;
 			}
 
@@ -69,8 +69,8 @@ void Shadow::update() {
 			if (draw_shadow) {
 				Ray shadow_ray(closest_hit.pos + closest_hit.normal * 1e-3f, light_vec);
 				bool is_shadowed = false;
-				for (auto &mesh : meshes) {
-					Hit hit = mesh->intersect(shadow_ray);
+				for (auto &object : objects) {
+					Hit hit = object->intersect(shadow_ray);
 					if (hit.d < 0.0f) {
 						continue;
 					}
@@ -79,7 +79,7 @@ void Shadow::update() {
 				}
 
 				if (is_shadowed) {
-					auto color = closest_mesh->ambient;
+					auto color = closest_obj->ambient;
 					texture_data[i * width + j] = { color.x, color.y, color.z, 1.0f };
 					continue;
 				}
@@ -88,7 +88,7 @@ void Shadow::update() {
 			auto cam_dir = -ray.dir;
 			cam_dir.Normalize();
 
-			auto color = blinn_phong(closest_hit.normal, light_vec, cam_dir, light->strength, closest_mesh);
+			auto color = blinn_phong(closest_hit.normal, light_vec, cam_dir, light->strength, closest_obj);
 
 			texture_data[i * width + j] = { color.x, color.y, color.z, 1.0f };
 		}

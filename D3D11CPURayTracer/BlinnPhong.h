@@ -12,5 +12,5 @@ public:
 
 private:
 	Light *light = nullptr;
-	Mesh *sphere = nullptr;
+	Object *sphere = nullptr;
 };

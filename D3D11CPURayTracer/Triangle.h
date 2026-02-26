@@ -1,7 +1,7 @@
 #pragma once
-#include "Mesh.h"
+#include "Object.h"
 
-class Triangle : public Mesh {
+class Triangle : public Object {
 public:
 	Triangle(DirectX::SimpleMath::Vector3 v0, DirectX::SimpleMath::Vector3 v1, DirectX::SimpleMath::Vector3 v2);
 	virtual ~Triangle() override = default;

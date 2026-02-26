@@ -3,11 +3,11 @@
 #include "Hit.h"
 #include "Ray.h"
 
-class Mesh {
+class Object {
 public:
-	Mesh() = default;
-	Mesh(DirectX::SimpleMath::Vector3 ambient);
-	virtual ~Mesh() = default;
+	Object() = default;
+	Object(DirectX::SimpleMath::Vector3 ambient);
+	virtual ~Object() = default;
 
 	virtual Hit intersect(Ray ray) = 0;
 

@@ -9,7 +9,7 @@ bool Projection::init(HWND h_wnd) {
 	// light
 	light = new Light(1.0f, { 0.0f, 1.0f, -1.0f });
 
-	// meshes
+	// objects
 	spheres.push_back(new Sphere(0.5f, { -0.25f, 0.0f, 0.5f }, { 1.0f, 0.0f, 0.0f })); // left, front, red
 	spheres.push_back(new Sphere(0.5f, { 0.25f, 0.0f, 1.0f }, { 0.0f, 0.0f, 1.0f })); // right, back, blue
 
@@ -32,7 +32,7 @@ void Projection::update() {
 
 	ImGui::End();
 
-	// meshes
+	// objects
 	auto clear_color = DirectX::SimpleMath::Vector4{ 0.1f, 0.2f, 0.4f, 1.0f };
 	std::fill(texture_data.begin(), texture_data.end(), clear_color);
 
@@ -45,7 +45,7 @@ void Projection::update() {
 				ray_dir.Normalize();
 				Ray ray(cam_pos, ray_dir);
 
-				Mesh *closest_sphere = nullptr;
+				Object *closest_sphere = nullptr;
 				Hit closest_hit(-1.0f, { 0.0f, 0.0f, -1.0f });
 				float min_d = 100.0f;
 				for (auto &sphere : spheres) {

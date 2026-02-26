@@ -2,13 +2,13 @@
 #include "Sphere.h"
 
 Sphere::Sphere(float radius, DirectX::SimpleMath::Vector3 center)
-	: Mesh()
+	: Object()
 	, radius(radius)
 	, center(center) {
 }
 
 Sphere::Sphere(float radius, DirectX::SimpleMath::Vector3 center, DirectX::SimpleMath::Vector3 ambient)
-	: Mesh(ambient)
+	: Object(ambient)
 	, radius(radius)
 	, center(center) {
 }

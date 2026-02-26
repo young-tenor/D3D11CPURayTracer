@@ -1,7 +1,7 @@
 #pragma once
-#include "Mesh.h"
+#include "Object.h"
 
-class Sphere : public Mesh {
+class Sphere : public Object {
 public:
 	Sphere(float radius, DirectX::SimpleMath::Vector3 center);
 	Sphere(float radius, DirectX::SimpleMath::Vector3 center, DirectX::SimpleMath::Vector3 ambient);

@@ -12,6 +12,6 @@ public:
 
 private:
 	Light *light = nullptr;
-	std::vector<Mesh *> spheres;
+	std::vector<Object *> spheres;
 	bool use_perspective = false;
 };

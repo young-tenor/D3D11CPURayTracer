@@ -2,7 +2,7 @@
 #include "Rect.h"
 
 Rect::Rect(DirectX::SimpleMath::Vector3 v0, DirectX::SimpleMath::Vector3 v1, DirectX::SimpleMath::Vector3 v2, DirectX::SimpleMath::Vector3 v3)
-	: Mesh()
+	: Object()
 	, triangle1(v0, v1, v3)
 	, triangle2(v1, v2, v3) {
 }

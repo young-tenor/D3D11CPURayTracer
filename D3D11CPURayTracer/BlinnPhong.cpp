@@ -9,7 +9,7 @@ bool BlinnPhong::init(HWND h_wnd) {
 	// light
 	light = new Light(1.0f, { 0.0f, 1.0f, -1.0f });
 
-	// mesh
+	// object
 	sphere = new Sphere(0.5f, { 0.0f, 0.0f, 0.5f });
 
 	return true;
@@ -45,7 +45,7 @@ void BlinnPhong::update() {
 
 	ImGui::End();
 
-	// mesh
+	// object
 	auto clear_color = DirectX::SimpleMath::Vector4{ 0.1f, 0.2f, 0.4f, 1.0f };
 	fill(texture_data.begin(), texture_data.end(), clear_color);
 
