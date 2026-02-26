@@ -139,10 +139,50 @@ bool App::init(HWND h_wnd) {
 	// sphere
 	sphere = new Sphere(0.5f, { 0.0f, 0.0f, 0.5f });
 
+	// GUI
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO &io = ImGui::GetIO(); 
+	(void)io;
+
+	ImGui::StyleColorsLight();
+
+	ImGui_ImplWin32_Init(h_wnd);
+	ImGui_ImplDX11_Init(device, context);
+
 	return true;
 }
 
 void App::update() {
+	ImGui_ImplDX11_NewFrame();
+	ImGui_ImplWin32_NewFrame();
+	ImGui::NewFrame();
+
+	ImGui::Begin("D3D11 CPU Ray Tracer");
+
+	ImGui::Text("material");
+	if (ImGui::SliderFloat("ambient", &sphere->ambient.x, 0.0f, 1.0f)) {
+		sphere->ambient.y = sphere->ambient.x;
+		sphere->ambient.z = sphere->ambient.x;
+	}
+	if (ImGui::SliderFloat("diffuse", &sphere->diffuse.x, 0.0f, 1.0f)) {
+		sphere->diffuse.y = sphere->diffuse.x;
+		sphere->diffuse.z = sphere->diffuse.x;
+	}
+	if (ImGui::SliderFloat("specular", &sphere->specular.x, 0.0f, 1.0f)) {
+		sphere->specular.y = sphere->specular.x;
+		sphere->specular.z = sphere->specular.x;
+	}
+	ImGui::SliderFloat("Shininess", &sphere->shininess, 1.0f, 256.0f);
+
+	ImGui::Separator();
+
+	ImGui::Text("light");
+	ImGui::DragFloat3("position", &light->pos.x, 0.1f);
+	ImGui::SliderFloat("strength", &light->strength, 0.0f, 5.0f);
+
+	ImGui::End();
+
 	texture_data.resize(width * height, { 0.1f, 0.2f, 0.4f, 1.0f });
 
 	// circle
@@ -171,8 +211,7 @@ void App::update() {
 			auto light_dir = (light->pos - hit.pos);
 			light_dir.Normalize();
 
-			//auto cam_dir = (DirectX::SimpleMath::Vector3{ 0.0f, 0.0f, -1.0f } - hit.pos);
-			auto cam_dir = DirectX::SimpleMath::Vector3{ 0.0f, 0.0f, -1.0f };
+			auto cam_dir = -ray.dir;
 			cam_dir.Normalize();
 
 			auto halfway = light_dir + cam_dir;
@@ -209,6 +248,10 @@ void App::render() {
 	context->PSSetSamplers(0, 1, &sampler);
 
 	context->Draw(3, 0);
+
+	ImGui::Render();
+	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+
 	swap_chain->Present(1, 0);
 }
 

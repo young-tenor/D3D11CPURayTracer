@@ -10,6 +10,8 @@ ATOM MyRegisterClass(HINSTANCE hInstance);
 BOOL InitInstance(HINSTANCE, int);
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
 int main() {
 	HINSTANCE hInstance = GetModuleHandle(NULL);
 	MyRegisterClass(hInstance);
@@ -81,6 +83,9 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow) {
 }
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
+	if (ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam))
+		return true;
+
 	switch (message) {
 	case WM_DESTROY:
 		PostQuitMessage(0);
