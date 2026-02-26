@@ -1,6 +1,5 @@
 #pragma once
 #include <directxtk/SimpleMath.h>
-#include "Circle.h";
 #include "Light.h";
 #include "Sphere.h";
 
@@ -10,8 +9,7 @@ public:
 	void update();
 	void render();
 
-private:
-	DirectX::SimpleMath::Vector2 screen_to_world(DirectX::SimpleMath::Vector2 pos);
+private:\
 	DirectX::SimpleMath::Vector3 screen_to_world(DirectX::SimpleMath::Vector3 pos);
 
 private:
@@ -36,6 +34,5 @@ private:
 
 	Light *light = nullptr;
 
-	Circle *circle = nullptr;
 	Sphere *sphere = nullptr;
 };

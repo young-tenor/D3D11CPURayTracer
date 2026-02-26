@@ -133,10 +133,6 @@ bool App::init(HWND h_wnd) {
 	light = new Light(1.0f, { 0.0f, 1.0f, 0.0f }, { 0.0f, -1.0f, 1.0f });
 
 	// mesh
-	// circle
-	circle = new Circle(0.5f, { 0.0f, 0.0f }, { 1.0f, 0.0f, 0.0f, 1.0f });
-
-	// sphere
 	sphere = new Sphere(0.5f, { 0.0f, 0.0f, 0.5f });
 
 	// GUI
@@ -185,15 +181,6 @@ void App::update() {
 
 	texture_data.resize(width * height, { 0.1f, 0.2f, 0.4f, 1.0f });
 
-	// circle
-	/*for (int i = 0; i < height; i++) {
-		for (int j = 0; j < width; j++) {
-			if (circle->is_inside(screen_to_world({ (float)j, (float)i }))) {
-				texture_data[i * width + j] = circle->color;
-			}
-		}
-	}*/
-
 	// sphere
 	for (int i = 0; i < height; i++) {
 		for (int j = 0; j < width; j++) {
@@ -204,7 +191,7 @@ void App::update() {
 				continue;
 			}
 
-			//https://en.wikipedia.org/wiki/Blinn%E2%80%93Phong_reflection_model
+			// https://en.wikipedia.org/wiki/Blinn%E2%80%93Phong_reflection_model
 			auto normal = (hit.pos - sphere->center);
 			normal.Normalize();
 
@@ -253,13 +240,6 @@ void App::render() {
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
 	swap_chain->Present(1, 0);
-}
-
-// [0, w - 1] * [0, h - 1] -> [-aspect, aspect] * [-1, 1]
-DirectX::SimpleMath::Vector2 App::screen_to_world(DirectX::SimpleMath::Vector2 pos) {
-	float x = pos.x * 2.0f * aspect / (width - 1) - aspect;
-	float y = pos.y * 2.0f / (height - 1) - 1.0f;
-	return { x, -y };
 }
 
 // [0, w - 1] * [0, h - 1] -> [-aspect, aspect] * [-1, 1]

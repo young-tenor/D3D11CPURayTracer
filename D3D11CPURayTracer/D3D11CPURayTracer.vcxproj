@@ -136,7 +136,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
-    <ClCompile Include="Circle.cpp" />
     <ClCompile Include="D3D11CPURayTracer.cpp" />
     <ClCompile Include="Hit.cpp" />
     <ClCompile Include="Light.cpp" />
@@ -151,7 +150,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h" />
-    <ClInclude Include="Circle.h" />
     <ClInclude Include="Hit.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="pch.h" />

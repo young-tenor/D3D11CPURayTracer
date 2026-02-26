@@ -6,6 +6,12 @@ Sphere::Sphere(float radius, DirectX::SimpleMath::Vector3 center)
 	, center(center) {
 }
 
+Sphere::Sphere(float radius, DirectX::SimpleMath::Vector3 center, DirectX::SimpleMath::Vector3 ambient)
+	: radius(radius)
+	, center(center)
+	, ambient(ambient) {
+}
+
 // https://en.wikipedia.org/wiki/Line%E2%80%93sphere_intersection
 Hit Sphere::intersect(Ray ray) {
 	Hit hit(-1.0f, { 0.0f, 0.0f, 0.0f });

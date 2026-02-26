@@ -6,6 +6,7 @@
 class Sphere {
 public:
 	Sphere(float radius, DirectX::SimpleMath::Vector3 center);
+	Sphere(float radius, DirectX::SimpleMath::Vector3 center, DirectX::SimpleMath::Vector3 ambient);
 
 	Hit intersect(Ray ray);
 
