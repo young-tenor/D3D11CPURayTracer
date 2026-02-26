@@ -135,6 +135,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="App.cpp" />
     <ClCompile Include="BlinnPhong.cpp" />
     <ClCompile Include="D3D11CPURayTracer.cpp" />
     <ClCompile Include="Hit.cpp" />
@@ -150,6 +151,7 @@
     <ClCompile Include="Sphere.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="App.h" />
     <ClInclude Include="BlinnPhong.h" />
     <ClInclude Include="Hit.h" />
     <ClInclude Include="Light.h" />

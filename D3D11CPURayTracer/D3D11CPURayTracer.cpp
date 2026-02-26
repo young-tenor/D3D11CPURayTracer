@@ -1,4 +1,5 @@
 #include "pch.h"
+#include "App.h"
 #include "BlinnPhong.h"
 #include "Projection.h"
 
@@ -21,8 +22,11 @@ int main() {
 		return -1;
 	}
 
-	//auto app = std::make_unique<BlinnPhong>();
-	auto app = std::make_unique<Projection>();
+	auto blinn_phong = new BlinnPhong();
+	auto projection = new Projection();
+
+	App *app = projection;
+
 	if (!app->init(hWnd)) {
 		std::cout << "init() failed." << std::endl;
 		return -1;
