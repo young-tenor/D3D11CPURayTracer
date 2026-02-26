@@ -148,6 +148,7 @@
     </ClCompile>
     <ClCompile Include="Projection.cpp" />
     <ClCompile Include="Ray.cpp" />
+    <ClCompile Include="Shadow.cpp" />
     <ClCompile Include="Sphere.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -158,6 +159,7 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="Projection.h" />
     <ClInclude Include="Ray.h" />
+    <ClInclude Include="Shadow.h" />
     <ClInclude Include="Sphere.h" />
   </ItemGroup>
   <ItemGroup>

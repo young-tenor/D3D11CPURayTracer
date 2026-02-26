@@ -2,6 +2,7 @@
 #include "App.h"
 #include "BlinnPhong.h"
 #include "Projection.h"
+#include "Shadow.h"
 
 HINSTANCE hInst;
 HWND hWnd;
@@ -24,8 +25,9 @@ int main() {
 
 	auto blinn_phong = new BlinnPhong();
 	auto projection = new Projection();
+	auto shadow = new Shadow();
 
-	App *app = projection;
+	App *app = shadow;
 
 	if (!app->init(hWnd)) {
 		std::cout << "init() failed." << std::endl;
