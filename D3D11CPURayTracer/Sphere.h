@@ -1,21 +1,15 @@
 #pragma once
-#include <directxtk/SimpleMath.h>
-#include "Hit.h"
-#include "Ray.h"
+#include "Mesh.h"
 
-class Sphere {
+class Sphere : public Mesh {
 public:
 	Sphere(float radius, DirectX::SimpleMath::Vector3 center);
 	Sphere(float radius, DirectX::SimpleMath::Vector3 center, DirectX::SimpleMath::Vector3 ambient);
+	virtual ~Sphere() override = default;
 
-	Hit intersect(Ray ray);
+	virtual Hit intersect(Ray ray) override;
 
 public:
 	float radius = 0.0f;
 	DirectX::SimpleMath::Vector3 center;
-
-	DirectX::SimpleMath::Vector3 ambient = { 0.1f, 0.1f, 0.1f };
-	DirectX::SimpleMath::Vector3 diffuse = { 0.7f, 0.7f, 0.7f };
-	DirectX::SimpleMath::Vector3 specular = { 0.5f, 0.5f, 0.5f };
-	float shininess = 32.0f;
 };

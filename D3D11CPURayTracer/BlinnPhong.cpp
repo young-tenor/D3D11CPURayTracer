@@ -57,17 +57,13 @@ void BlinnPhong::update() {
 			if (hit.d < 0.0f) {
 				continue;
 			}
-
-			auto normal = (hit.pos - sphere->center);
-			normal.Normalize();
-
 			auto light_dir = (light->pos - hit.pos);
 			light_dir.Normalize();
 
 			auto cam_dir = -ray.dir;
 			cam_dir.Normalize();
 
-			auto color = blinn_phong(normal, light_dir, cam_dir, light->strength, sphere);
+			auto color = blinn_phong(hit.normal, light_dir, cam_dir, light->strength, sphere);
 
 			texture_data[i * width + j] = { color.x, color.y, color.z, 1.0f };
 		}

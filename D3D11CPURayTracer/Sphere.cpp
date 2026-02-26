@@ -2,14 +2,15 @@
 #include "Sphere.h"
 
 Sphere::Sphere(float radius, DirectX::SimpleMath::Vector3 center)
-	: radius(radius)
+	: Mesh()
+	, radius(radius)
 	, center(center) {
 }
 
 Sphere::Sphere(float radius, DirectX::SimpleMath::Vector3 center, DirectX::SimpleMath::Vector3 ambient)
-	: radius(radius)
-	, center(center)
-	, ambient(ambient) {
+	: Mesh(ambient)
+	, radius(radius)
+	, center(center) {
 }
 
 // https://en.wikipedia.org/wiki/Line%E2%80%93sphere_intersection
@@ -30,7 +31,8 @@ Hit Sphere::intersect(Ray ray) {
 		hit.d = (-b + std::sqrt(nabla)) / (2.0f * a);
 	}
 	hit.pos = ray.orig + hit.d * ray.dir;
+	hit.normal = hit.pos - center;
+	hit.normal.Normalize();
 
 	return hit;
 }
-

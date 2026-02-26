@@ -2,7 +2,7 @@
 #include <directxtk/SimpleMath.h>
 #include "App.h"
 #include "Light.h";
-#include "Sphere.h";
+#include "Mesh.h";
 
 class Shadow : public App {
 public:
@@ -12,6 +12,6 @@ public:
 
 private:
 	Light *light = nullptr;
-	Sphere *sphere = nullptr;
+	std::vector<Mesh *> meshes;
 	bool draw_shadow = false;
 };

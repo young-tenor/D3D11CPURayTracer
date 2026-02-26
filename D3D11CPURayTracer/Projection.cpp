@@ -45,7 +45,7 @@ void Projection::update() {
 				ray_dir.Normalize();
 				Ray ray(cam_pos, ray_dir);
 
-				Sphere *closest_sphere = nullptr;
+				Mesh *closest_sphere = nullptr;
 				Hit closest_hit(-1.0f, { 0.0f, 0.0f, -1.0f });
 				float min_d = 100.0f;
 				for (auto &sphere : spheres) {
@@ -61,16 +61,13 @@ void Projection::update() {
 					continue;
 				}
 
-				auto normal = (closest_hit.pos - closest_sphere->center);
-				normal.Normalize();
-
 				auto light_dir = (light->pos - closest_hit.pos);
 				light_dir.Normalize();
 
 				auto cam_dir = -ray.dir;
 				cam_dir.Normalize();
 
-				auto color = blinn_phong(normal, light_dir, cam_dir, light->strength, closest_sphere);
+				auto color = blinn_phong(closest_hit.normal, light_dir, cam_dir, light->strength, closest_sphere);
 
 				texture_data[i * width + j] = { color.x, color.y, color.z, 1.0f };
 			} else {
@@ -81,16 +78,13 @@ void Projection::update() {
 						continue;
 					}
 
-					auto normal = (hit.pos - sphere->center);
-					normal.Normalize();
-
 					auto light_dir = (light->pos - hit.pos);
 					light_dir.Normalize();
 
 					auto cam_dir = -ray.dir;
 					cam_dir.Normalize();
 
-					auto color = blinn_phong(normal, light_dir, cam_dir, light->strength, sphere);
+					auto color = blinn_phong(hit.normal, light_dir, cam_dir, light->strength, sphere);
 
 					texture_data[i * width + j] = { color.x, color.y, color.z, 1.0f };
 				}

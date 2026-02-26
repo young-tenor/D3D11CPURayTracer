@@ -158,13 +158,13 @@ DirectX::SimpleMath::Vector3 App::blinn_phong(
 	DirectX::SimpleMath::Vector3 light_dir,
 	DirectX::SimpleMath::Vector3 cam_dir,
 	float light_strength,
-	Sphere *sphere) {
+	Mesh *mesh) {
 	auto halfway = light_dir + cam_dir;
 	halfway.Normalize();
 
-	auto ambient = sphere->ambient;
-	auto diffuse = std::max(normal.Dot(light_dir), 0.0f) * sphere->diffuse;
-	auto specular = std::pow(std::max(normal.Dot(halfway), 0.0f), sphere->shininess) * sphere->specular;
+	auto ambient = mesh->ambient;
+	auto diffuse = std::max(normal.Dot(light_dir), 0.0f) * mesh->diffuse;
+	auto specular = std::pow(std::max(normal.Dot(halfway), 0.0f), mesh->shininess) * mesh->specular;
 	auto color = ambient + (diffuse + specular) * light_strength;
 
 	return color;

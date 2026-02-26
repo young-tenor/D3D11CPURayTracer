@@ -1,6 +1,6 @@
 #pragma once
 #include <directxtk/SimpleMath.h>
-#include "Sphere.h"
+#include "Mesh.h"
 
 class App {
 public:
@@ -17,7 +17,7 @@ protected:
 		DirectX::SimpleMath::Vector3 light_dir,
 		DirectX::SimpleMath::Vector3 cam_dir,
 		float light_strength,
-		Sphere *sphere);
+		Mesh *mesh);
 
 protected:
 	HWND h_wnd = nullptr;
