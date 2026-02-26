@@ -14,4 +14,5 @@ private:
 	Light *light = nullptr;
 	std::vector<Object *> objects;
 	bool draw_shadow = false;
+	bool use_ray_bias = false;
 };

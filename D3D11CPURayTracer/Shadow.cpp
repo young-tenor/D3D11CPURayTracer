@@ -33,6 +33,10 @@ void Shadow::update() {
 
 	ImGui::Checkbox("draw shadow", &draw_shadow);
 
+	ImGui::BeginDisabled(!draw_shadow);
+	ImGui::Checkbox("use ray bias", &use_ray_bias);
+	ImGui::EndDisabled();
+
 	ImGui::End();
 
 	// objects
@@ -67,7 +71,8 @@ void Shadow::update() {
 			light_vec.Normalize();
 
 			if (draw_shadow) {
-				Ray shadow_ray(closest_hit.pos + closest_hit.normal * 1e-3f, light_vec);
+				float bias = use_ray_bias ? 1e-3f : 0.0f;
+				Ray shadow_ray(closest_hit.pos + closest_hit.normal * bias, light_vec);
 				bool is_shadowed = false;
 				for (auto &object : objects) {
 					Hit hit = object->intersect(shadow_ray);
