@@ -2,7 +2,7 @@
 #include "App.h"
 
 bool App::init(HWND h_wnd) {
-	h_wnd = h_wnd;
+	this->h_wnd = h_wnd;
 
 	RECT rc;
 	GetClientRect(h_wnd, &rc);
