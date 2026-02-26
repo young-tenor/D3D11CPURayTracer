@@ -49,7 +49,7 @@ void Shadow::update() {
 			auto cam_pos = DirectX::SimpleMath::Vector3{ 0.0f, 0.0f, -1.0f };
 			auto ray_dir = pos_world - cam_pos;
 			ray_dir.Normalize();
-			Ray ray(cam_pos, ray_dir);
+			Ray ray(pos_world, ray_dir);
 
 			Object *closest_obj = nullptr;
 			Hit closest_hit(-1.0f, { 0.0f, 0.0f, -1.0f });
