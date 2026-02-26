@@ -20,7 +20,7 @@ void BlinnPhong::update() {
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
 
-	ImGui::Begin("D3D11 CPU Ray Tracer");
+	ImGui::Begin("Blinn-Phong");
 
 	ImGui::Text("material");
 	if (ImGui::SliderFloat("ambient", &sphere->ambient.x, 0.0f, 1.0f)) {
