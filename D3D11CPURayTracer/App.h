@@ -1,5 +1,6 @@
 #pragma once
 #include <directxtk/SimpleMath.h>
+#include "Sphere.h"
 
 class App {
 public:
@@ -11,6 +12,12 @@ public:
 
 protected:
 	DirectX::SimpleMath::Vector3 screen_to_world(DirectX::SimpleMath::Vector3 pos);
+	DirectX::SimpleMath::Vector3 blinn_phong(
+		DirectX::SimpleMath::Vector3 normal,
+		DirectX::SimpleMath::Vector3 light_dir,
+		DirectX::SimpleMath::Vector3 cam_dir,
+		float light_strength,
+		Sphere *sphere);
 
 protected:
 	HWND h_wnd = nullptr;

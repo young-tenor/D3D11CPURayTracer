@@ -61,7 +61,6 @@ void Projection::update() {
 					continue;
 				}
 
-				// https://en.wikipedia.org/wiki/Blinn%E2%80%93Phong_reflection_model
 				auto normal = (closest_hit.pos - closest_sphere->center);
 				normal.Normalize();
 
@@ -71,13 +70,7 @@ void Projection::update() {
 				auto cam_dir = -ray.dir;
 				cam_dir.Normalize();
 
-				auto halfway = light_dir + cam_dir;
-				halfway.Normalize();
-
-				auto ambient = closest_sphere->ambient;
-				auto diffuse = std::max(normal.Dot(light_dir), 0.0f) * closest_sphere->diffuse;
-				auto specular = std::pow(std::max(normal.Dot(halfway), 0.0f), closest_sphere->shininess) * closest_sphere->specular;
-				auto color = ambient + (diffuse + specular) * light->strength;
+				auto color = blinn_phong(normal, light_dir, cam_dir, light->strength, closest_sphere);
 
 				texture_data[i * width + j] = { color.x, color.y, color.z, 1.0f };
 			} else {
@@ -88,7 +81,6 @@ void Projection::update() {
 						continue;
 					}
 
-					// https://en.wikipedia.org/wiki/Blinn%E2%80%93Phong_reflection_model
 					auto normal = (hit.pos - sphere->center);
 					normal.Normalize();
 
@@ -98,13 +90,7 @@ void Projection::update() {
 					auto cam_dir = -ray.dir;
 					cam_dir.Normalize();
 
-					auto halfway = light_dir + cam_dir;
-					halfway.Normalize();
-
-					auto ambient = sphere->ambient;
-					auto diffuse = std::max(normal.Dot(light_dir), 0.0f) * sphere->diffuse;
-					auto specular = std::pow(std::max(normal.Dot(halfway), 0.0f), sphere->shininess) * sphere->specular;
-					auto color = ambient + (diffuse + specular) * light->strength;
+					auto color = blinn_phong(normal, light_dir, cam_dir, light->strength, sphere);
 
 					texture_data[i * width + j] = { color.x, color.y, color.z, 1.0f };
 				}

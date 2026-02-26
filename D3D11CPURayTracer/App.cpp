@@ -151,3 +151,21 @@ DirectX::SimpleMath::Vector3 App::screen_to_world(DirectX::SimpleMath::Vector3 p
 	float y = pos.y * 2.0f / (height - 1) - 1.0f;
 	return { x, -y, 0.0f };
 }
+
+// https://en.wikipedia.org/wiki/Blinn%E2%80%93Phong_reflection_model
+DirectX::SimpleMath::Vector3 App::blinn_phong(
+	DirectX::SimpleMath::Vector3 normal,
+	DirectX::SimpleMath::Vector3 light_dir,
+	DirectX::SimpleMath::Vector3 cam_dir,
+	float light_strength,
+	Sphere *sphere) {
+	auto halfway = light_dir + cam_dir;
+	halfway.Normalize();
+
+	auto ambient = sphere->ambient;
+	auto diffuse = std::max(normal.Dot(light_dir), 0.0f) * sphere->diffuse;
+	auto specular = std::pow(std::max(normal.Dot(halfway), 0.0f), sphere->shininess) * sphere->specular;
+	auto color = ambient + (diffuse + specular) * light_strength;
+
+	return color;
+}
