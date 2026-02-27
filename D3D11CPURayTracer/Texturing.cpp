@@ -31,6 +31,7 @@ void Texturing::update() {
 
 	ImGui::Begin("Texturing");
 
+	ImGui::Text("sampling mode");
 	if (ImGui::RadioButton("point sampling", linear_sampling == false)) {
 		linear_sampling = false;
 	}
@@ -40,6 +41,7 @@ void Texturing::update() {
 
 	ImGui::Separator();
 
+	ImGui::Text("address mode");
 	if (ImGui::RadioButton("clamp", wrap == false)) {
 		wrap = false;
 	}
@@ -49,6 +51,7 @@ void Texturing::update() {
 
 	ImGui::Separator();
 
+	ImGui::Text("etc");
 	ImGui::Checkbox("expand", &expand);
 
 	ImGui::End();
