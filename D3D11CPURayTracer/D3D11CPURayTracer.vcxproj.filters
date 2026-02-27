@@ -72,6 +72,9 @@
     <ClCompile Include="Texturing.cpp">
       <Filter>Source Files\App</Filter>
     </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -112,6 +115,9 @@
     </ClInclude>
     <ClInclude Include="Texturing.h">
       <Filter>Header Files\App</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

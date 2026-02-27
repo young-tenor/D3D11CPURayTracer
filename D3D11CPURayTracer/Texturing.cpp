@@ -19,15 +19,7 @@ bool Texturing::init(HWND h_wnd) {
 		glm::vec2(0.0f, 1.0f));
 
 	// texture
-	for (int i = 0; i < 4; i++) {
-		for (int j = 0; j < 4; j++) {
-			if ((i + j) % 2 == 0) {
-				texture[i][j] = glm::vec3(0.0f);
-			} else {
-				texture[i][j] = glm::vec3(1.0f);
-			}
-		}
-	}
+	texture = new Texture(4.0f, 4.0f);
 
 	return true;
 }
@@ -60,15 +52,7 @@ void Texturing::update() {
 			if (hit.d < 0.0f) {
 				continue;
 			}
-
-			auto xy = glm::vec2(hit.uv.x * 4.0f - 0.5f, hit.uv.y * 4.0f - 0.5f);
-			int x = std::round(xy.x);
-			int y = std::round(xy.y);
-
-			x = std::clamp(x, 0, 3);
-			y = std::clamp(y, 0, 3);
-
-			auto color = texture[y][x];
+			auto color = texture->sample_point(hit.uv);
 			canvas_data[i * width + j] = glm::vec4(color, 1.0f);
 		}
 	}

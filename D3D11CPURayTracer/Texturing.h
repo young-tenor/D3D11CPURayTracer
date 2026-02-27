@@ -1,6 +1,7 @@
 #pragma once
 #include "App.h"
 #include "Rect.h"
+#include "Texture.h"
 
 class Texturing : public App {
 public:
@@ -12,7 +13,7 @@ public:
 
 private:
 	Rect *rect = nullptr;
+	Texture *texture = nullptr;
 	bool linear_sampling = false;
-	glm::vec3 texture[4][4];
 };
 
