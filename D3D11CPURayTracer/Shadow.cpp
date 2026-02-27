@@ -41,7 +41,7 @@ void Shadow::update() {
 
 	// objects
 	auto clear_color = DirectX::SimpleMath::Vector4{ 0.1f, 0.2f, 0.4f, 1.0f };
-	std::fill(texture_data.begin(), texture_data.end(), clear_color);
+	std::fill(canvas_data.begin(), canvas_data.end(), clear_color);
 
 	for (int i = 0; i < height; i++) {
 		for (int j = 0; j < width; j++) {
@@ -85,7 +85,7 @@ void Shadow::update() {
 
 				if (is_shadowed) {
 					auto color = closest_obj->ambient;
-					texture_data[i * width + j] = { color.x, color.y, color.z, 1.0f };
+					canvas_data[i * width + j] = { color.x, color.y, color.z, 1.0f };
 					continue;
 				}
 			}
@@ -95,14 +95,14 @@ void Shadow::update() {
 
 			auto color = blinn_phong(closest_hit.normal, light_vec, cam_dir, light->strength, closest_obj);
 
-			texture_data[i * width + j] = { color.x, color.y, color.z, 1.0f };
+			canvas_data[i * width + j] = { color.x, color.y, color.z, 1.0f };
 		}
 	}
 
 	D3D11_MAPPED_SUBRESOURCE resource;
-	context->Map(texture, 0, D3D11_MAP_WRITE_DISCARD, 0, &resource);
-	memcpy(resource.pData, texture_data.data(), texture_data.size() * sizeof(DirectX::SimpleMath::Vector4));
-	context->Unmap(texture, 0);
+	context->Map(canvas, 0, D3D11_MAP_WRITE_DISCARD, 0, &resource);
+	memcpy(resource.pData, canvas_data.data(), canvas_data.size() * sizeof(DirectX::SimpleMath::Vector4));
+	context->Unmap(canvas, 0);
 }
 
 void Shadow::render() {
@@ -117,7 +117,7 @@ void Shadow::render() {
 	context->VSSetShader(vs, nullptr, 0);
 	context->PSSetShader(ps, nullptr, 0);
 
-	context->PSSetShaderResources(0, 1, &texture_srv);
+	context->PSSetShaderResources(0, 1, &canvas_srv);
 	context->PSSetSamplers(0, 1, &sampler);
 
 	context->Draw(3, 0);

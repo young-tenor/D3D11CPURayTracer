@@ -101,19 +101,19 @@ bool App::init(HWND h_wnd) {
 	texture_desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
 	texture_desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 
-	hr = device->CreateTexture2D(&texture_desc, nullptr, &texture);
+	hr = device->CreateTexture2D(&texture_desc, nullptr, &canvas);
 	if (FAILED(hr)) {
 		std::cout << "CreateTexture2D() failed." << std::endl;
 		return false;
 	}
 
-	hr = device->CreateShaderResourceView(texture, nullptr, &texture_srv);
+	hr = device->CreateShaderResourceView(canvas, nullptr, &canvas_srv);
 	if (FAILED(hr)) {
 		std::cout << "CreateShaderResourceView() failed." << std::endl;
 		return false;
 	}
 
-	texture_data.resize(width * height);
+	canvas_data.resize(width * height);
 
 	// sampler
 	D3D11_SAMPLER_DESC sampler_desc = { 0 };

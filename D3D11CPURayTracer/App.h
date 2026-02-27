@@ -34,8 +34,8 @@ protected:
 	ID3D11VertexShader *vs = nullptr;
 	ID3D11PixelShader *ps = nullptr;
 
-	ID3D11Texture2D *texture = nullptr;
-	ID3D11ShaderResourceView *texture_srv = nullptr;
-	std::vector<DirectX::SimpleMath::Vector4> texture_data;
+	ID3D11Texture2D *canvas = nullptr;
+	ID3D11ShaderResourceView *canvas_srv = nullptr;
+	std::vector<DirectX::SimpleMath::Vector4> canvas_data;
 	ID3D11SamplerState *sampler = nullptr;
 };

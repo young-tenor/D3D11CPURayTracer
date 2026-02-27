@@ -9,4 +9,5 @@ public:
 	float d = -1.0f;
 	DirectX::SimpleMath::Vector3 pos;
 	DirectX::SimpleMath::Vector3 normal;
+	DirectX::SimpleMath::Vector2 uv;
 };
