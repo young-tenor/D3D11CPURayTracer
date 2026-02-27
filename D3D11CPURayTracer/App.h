@@ -1,5 +1,4 @@
 #pragma once
-#include <directxtk/SimpleMath.h>
 #include "Object.h"
 
 class App {
@@ -11,11 +10,11 @@ public:
 	virtual void render() = 0;
 
 protected:
-	DirectX::SimpleMath::Vector3 screen_to_world(DirectX::SimpleMath::Vector3 pos);
-	DirectX::SimpleMath::Vector3 blinn_phong(
-		DirectX::SimpleMath::Vector3 normal,
-		DirectX::SimpleMath::Vector3 light_dir,
-		DirectX::SimpleMath::Vector3 cam_dir,
+	glm::vec3 screen_to_world(glm::vec3 pos);
+	glm::vec3 blinn_phong(
+		glm::vec3 normal,
+		glm::vec3 light_dir,
+		glm::vec3 cam_dir,
 		float light_strength,
 		Object *object);
 
@@ -36,6 +35,6 @@ protected:
 
 	ID3D11Texture2D *canvas = nullptr;
 	ID3D11ShaderResourceView *canvas_srv = nullptr;
-	std::vector<DirectX::SimpleMath::Vector4> canvas_data;
+	std::vector<glm::vec4> canvas_data;
 	ID3D11SamplerState *sampler = nullptr;
 };

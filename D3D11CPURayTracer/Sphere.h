@@ -3,13 +3,13 @@
 
 class Sphere : public Object {
 public:
-	Sphere(float radius, DirectX::SimpleMath::Vector3 center);
-	Sphere(float radius, DirectX::SimpleMath::Vector3 center, DirectX::SimpleMath::Vector3 ambient);
+	Sphere(float radius, glm::vec3 center);
+	Sphere(float radius, glm::vec3 center, glm::vec3 ambient);
 	virtual ~Sphere() override = default;
 
 	virtual Hit intersect(Ray ray) override;
 
 public:
 	float radius = 0.0f;
-	DirectX::SimpleMath::Vector3 center;
+	glm::vec3 center;
 };

@@ -1,12 +1,11 @@
 #pragma once
-#include <directxtk/SimpleMath.h>
 
 class Light {
 public:
-	Light(float strength, DirectX::SimpleMath::Vector3 pos);
+	Light(float strength, glm::vec3 pos);
 
 public:
 	float strength = 1.0f;
-	DirectX::SimpleMath::Vector3 pos;
+	glm::vec3 pos;
 };
 

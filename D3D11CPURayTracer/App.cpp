@@ -146,25 +146,24 @@ bool App::init(HWND h_wnd) {
 }
 
 // [0, w - 1] * [0, h - 1] -> [-aspect, aspect] * [-1, 1]
-DirectX::SimpleMath::Vector3 App::screen_to_world(DirectX::SimpleMath::Vector3 pos) {
+glm::vec3 App::screen_to_world(glm::vec3 pos) {
 	float x = pos.x * 2.0f * aspect / (width - 1) - aspect;
 	float y = pos.y * 2.0f / (height - 1) - 1.0f;
-	return { x, -y, 0.0f };
+	return glm::vec3(x, -y, 0.0f);
 }
 
 // https://en.wikipedia.org/wiki/Blinn%E2%80%93Phong_reflection_model
-DirectX::SimpleMath::Vector3 App::blinn_phong(
-	DirectX::SimpleMath::Vector3 normal,
-	DirectX::SimpleMath::Vector3 light_dir,
-	DirectX::SimpleMath::Vector3 cam_dir,
+glm::vec3 App::blinn_phong(
+	glm::vec3 normal,
+	glm::vec3 light_dir,
+	glm::vec3 cam_dir,
 	float light_strength,
 	Object *object) {
-	auto halfway = light_dir + cam_dir;
-	halfway.Normalize();
+	auto halfway = glm::normalize(light_dir + cam_dir);
 
 	auto ambient = object->ambient;
-	auto diffuse = std::max(normal.Dot(light_dir), 0.0f) * object->diffuse;
-	auto specular = std::pow(std::max(normal.Dot(halfway), 0.0f), object->shininess) * object->specular;
+	auto diffuse = glm::max(glm::dot(normal, light_dir), 0.0f) * object->diffuse;
+	auto specular = glm::pow(glm::max(glm::dot(normal, halfway), 0.0f), object->shininess) * object->specular;
 	auto color = ambient + (diffuse + specular) * light_strength;
 
 	return color;

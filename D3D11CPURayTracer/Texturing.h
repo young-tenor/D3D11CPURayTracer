@@ -13,6 +13,6 @@ public:
 private:
 	Rect *rect = nullptr;
 	bool linear_sampling = false;
-	DirectX::SimpleMath::Vector3 texture[4][4];
+	glm::vec3 texture[4][4];
 };
 

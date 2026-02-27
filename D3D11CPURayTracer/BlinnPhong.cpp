@@ -7,10 +7,10 @@ bool BlinnPhong::init(HWND h_wnd) {
 	}
 
 	// light
-	light = new Light(1.0f, { 0.0f, 1.0f, -1.0f });
+	light = new Light(1.0f, glm::vec3(0.0f, 1.0f, -1.0f));
 
 	// object
-	sphere = new Sphere(0.5f, { 0.0f, 0.0f, 0.5f });
+	sphere = new Sphere(0.5f, glm::vec3(0.0f, 0.0f, 0.5f));
 
 	return true;
 }
@@ -46,32 +46,30 @@ void BlinnPhong::update() {
 	ImGui::End();
 
 	// object
-	auto clear_color = DirectX::SimpleMath::Vector4{ 0.1f, 0.2f, 0.4f, 1.0f };
+	auto clear_color = glm::vec4(0.1f, 0.2f, 0.4f, 1.0f);
 	fill(canvas_data.begin(), canvas_data.end(), clear_color);
 
 	for (int i = 0; i < height; i++) {
 		for (int j = 0; j < width; j++) {
-			auto pos_world = screen_to_world({ (float)j, (float)i, 0.0f });
-			Ray ray(pos_world, { 0.0f, 0.0f, 1.0f });
+			auto pos_world = screen_to_world(glm::vec3((float)j, (float)i, 0.0f));
+			Ray ray(pos_world, glm::vec3(0.0f, 0.0f, 1.0f));
 			Hit hit = sphere->intersect(ray);
 			if (hit.d < 0.0f) {
 				continue;
 			}
-			auto light_vec = light->pos - hit.pos;
-			light_vec.Normalize();
+			auto light_vec = glm::normalize(light->pos - hit.pos);
 
-			auto cam_dir = -ray.dir;
-			cam_dir.Normalize();
+			auto cam_dir = glm::normalize(-ray.dir);
 
 			auto color = blinn_phong(hit.normal, light_vec, cam_dir, light->strength, sphere);
 
-			canvas_data[i * width + j] = { color.x, color.y, color.z, 1.0f };
+			canvas_data[i * width + j] = glm::vec4(color, 1.0f);
 		}
 	}
 
 	D3D11_MAPPED_SUBRESOURCE resource;
 	context->Map(canvas, 0, D3D11_MAP_WRITE_DISCARD, 0, &resource);
-	memcpy(resource.pData, canvas_data.data(), canvas_data.size() * sizeof(DirectX::SimpleMath::Vector4));
+	memcpy(resource.pData, canvas_data.data(), canvas_data.size() * sizeof(glm::vec4));
 	context->Unmap(canvas, 0);
 }
 

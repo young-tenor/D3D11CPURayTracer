@@ -10,11 +10,11 @@ bool Shadow::init(HWND h_wnd) {
 	}
 
 	// light
-	light = new Light(1.0f, { 0.0f, 1.0f, -1.0f });
+	light = new Light(1.0f, glm::vec3(0.0f, 1.0f, -1.0f));
 
 	// objects
-	objects.push_back(new Sphere(0.5f, { 0.0f, 0.0f, 1.0f }));
-	objects.push_back(new Rect({ -2.0f, -1.0f, 4.0f }, { 2.0f, -1.0, 4.0f }, { 2.0f, -1.0, 0.0f }, { -2.0f, -1.0, 0.0f }));
+	objects.push_back(new Sphere(0.5f, glm::vec3(0.0f, 0.0f, 1.0f)));
+	objects.push_back(new Rect(glm::vec3(-2.0f, -1.0f, 4.0f), glm::vec3(2.0f, -1.0, 4.0f), glm::vec3(2.0f, -1.0, 0.0f), glm::vec3(-2.0f, -1.0, 0.0f)));
 
 	return true;
 }
@@ -40,19 +40,18 @@ void Shadow::update() {
 	ImGui::End();
 
 	// objects
-	auto clear_color = DirectX::SimpleMath::Vector4{ 0.1f, 0.2f, 0.4f, 1.0f };
+	auto clear_color = glm::vec4(0.1f, 0.2f, 0.4f, 1.0f);
 	std::fill(canvas_data.begin(), canvas_data.end(), clear_color);
 
 	for (int i = 0; i < height; i++) {
 		for (int j = 0; j < width; j++) {
-			auto pos_world = screen_to_world({ (float)j, (float)i, 0.0f });
-			auto cam_pos = DirectX::SimpleMath::Vector3{ 0.0f, 0.0f, -1.0f };
-			auto ray_dir = pos_world - cam_pos;
-			ray_dir.Normalize();
+			auto pos_world = screen_to_world(glm::vec3((float)j, (float)i, 0.0f));
+			auto cam_pos = glm::vec3(0.0f, 0.0f, -1.0f);
+			auto ray_dir = glm::normalize(pos_world - cam_pos);
 			Ray ray(pos_world, ray_dir);
 
 			Object *closest_obj = nullptr;
-			Hit closest_hit(-1.0f, { 0.0f, 0.0f, -1.0f });
+			Hit closest_hit(-1.0f, glm::vec3(0.0f, 0.0f, -1.0f));
 			float min_d = 100.0f;
 			for (auto &object : objects) {
 				Hit hit = object->intersect(ray);
@@ -67,8 +66,7 @@ void Shadow::update() {
 				continue;
 			}
 
-			auto light_vec = light->pos - closest_hit.pos;
-			light_vec.Normalize();
+			auto light_vec = glm::normalize(light->pos - closest_hit.pos);
 
 			if (draw_shadow) {
 				float bias = use_ray_bias ? 1e-3f : 0.0f;
@@ -85,23 +83,22 @@ void Shadow::update() {
 
 				if (is_shadowed) {
 					auto color = closest_obj->ambient;
-					canvas_data[i * width + j] = { color.x, color.y, color.z, 1.0f };
+					canvas_data[i * width + j] = glm::vec4(color, 1.0f);
 					continue;
 				}
 			}
 
-			auto cam_dir = -ray.dir;
-			cam_dir.Normalize();
+			auto cam_dir = glm::normalize(-ray.dir);
 
 			auto color = blinn_phong(closest_hit.normal, light_vec, cam_dir, light->strength, closest_obj);
 
-			canvas_data[i * width + j] = { color.x, color.y, color.z, 1.0f };
+			canvas_data[i * width + j] = glm::vec4(color, 1.0f);
 		}
 	}
 
 	D3D11_MAPPED_SUBRESOURCE resource;
 	context->Map(canvas, 0, D3D11_MAP_WRITE_DISCARD, 0, &resource);
-	memcpy(resource.pData, canvas_data.data(), canvas_data.size() * sizeof(DirectX::SimpleMath::Vector4));
+	memcpy(resource.pData, canvas_data.data(), canvas_data.size() * sizeof(glm::vec4));
 	context->Unmap(canvas, 0);
 }
 

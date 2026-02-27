@@ -5,7 +5,7 @@
 #include <cmath>
 #include <d3d11.h>
 #include <d3dcompiler.h>
-#include <directxtk/SimpleMath.h>
+#include <glm/glm.hpp>
 #include <imgui.h>
 #include <imgui_impl_dx11.h>
 #include <imgui_impl_win32.h>
@@ -16,3 +16,4 @@
 
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "d3dcompiler.lib")
+

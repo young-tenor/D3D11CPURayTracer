@@ -1,13 +1,12 @@
 #pragma once
-#include <directxtk/SimpleMath.h>
 
 class Hit {
 public:
-	Hit(float d, DirectX::SimpleMath::Vector3 pos);
+	Hit(float d, glm::vec3 pos);
 
 public:
 	float d = -1.0f;
-	DirectX::SimpleMath::Vector3 pos;
-	DirectX::SimpleMath::Vector3 normal;
-	DirectX::SimpleMath::Vector2 uv;
+	glm::vec3 pos;
+	glm::vec3 normal;
+	glm::vec2 uv;
 };

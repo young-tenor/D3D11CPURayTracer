@@ -1,5 +1,4 @@
 #pragma once
-#include <directxtk/SimpleMath.h>
 #include "App.h";
 #include "Light.h";
 #include "Sphere.h";
