@@ -21,26 +21,46 @@ glm::vec3 Texture::clamped_color(int i, int j) {
 }
 
 glm::vec3 Texture::wrapped_color(int i, int j) {
-	return glm::vec3();
+	i = ((i % height) + height) % height;
+	j = ((j % width) + width) % width;
+	return image[i * width + j];
 }
 
-glm::vec3 Texture::sample_point(glm::vec2 uv) {
+glm::vec3 Texture::sample_point(glm::vec2 uv, bool wrap) {
 	auto xy = uv * glm::vec2(width, height) - glm::vec2(0.5f);
 	int i = std::round(xy.y);
 	int j = std::round(xy.x);
-	auto color = clamped_color(i, j);
+	glm::vec3 color;
+	if (wrap) {
+		color = wrapped_color(i, j);
+	} else {
+		color = clamped_color(i, j);
+	}
 	return color;
 }
 
-glm::vec3 Texture::sample_linear(glm::vec2 uv) {
+glm::vec3 Texture::sample_linear(glm::vec2 uv, bool wrap) {
 	auto xy = uv * glm::vec2(width, height) - glm::vec2(0.5f);
 	int i = std::floor(xy.y);
 	int j = std::floor(xy.x);
 	float dy = xy.y - i;
 	float dx = xy.x - j;
 
-	auto top = clamped_color(i, j) * (1.0f - dx) + clamped_color(i, j + 1) * dx;
-	auto bot = clamped_color(i + 1, j) * (1.0f - dx) + clamped_color(i + 1, j + 1) * dx;
+	glm::vec3 c00, c10, c01, c11;
+	if (wrap) {
+		c00 = wrapped_color(i, j);
+		c01 = wrapped_color(i, j + 1);
+		c10 = wrapped_color(i + 1, j);
+		c11 = wrapped_color(i + 1, j + 1);
+	} else {
+		c00 = clamped_color(i, j);
+		c01 = clamped_color(i, j + 1);
+		c10 = clamped_color(i + 1, j);
+		c11 = clamped_color(i + 1, j + 1);
+	}
+
+	auto top = c00 * (1.0f - dx) + c01 * dx;
+	auto bot = c10 * (1.0f - dx) + c11 * dx;
 	auto color = top * (1.0f - dy) + bot * dy;
 
 	return color;

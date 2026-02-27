@@ -29,13 +29,20 @@ void Texturing::update() {
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
 
-	ImGui::Begin("Perspective Projection");
+	ImGui::Begin("Texturing");
 
 	if (ImGui::RadioButton("point sampling", linear_sampling == false)) {
 		linear_sampling = false;
 	}
 	if (ImGui::RadioButton("linear sampling", linear_sampling == true)) {
 		linear_sampling = true;
+	}
+
+	if (ImGui::RadioButton("clamp", wrap == false)) {
+		wrap = false;
+	}
+	if (ImGui::RadioButton("wrap", wrap == true)) {
+		wrap = true;
 	}
 
 	ImGui::End();
@@ -55,9 +62,9 @@ void Texturing::update() {
 
 			glm::vec3 color;
 			if (linear_sampling) {
-				color = texture->sample_linear(hit.uv);
+				color = texture->sample_linear(hit.uv, wrap);
 			} else {
-				color = texture->sample_point(hit.uv);
+				color = texture->sample_point(hit.uv, wrap);
 			}
 			canvas_data[i * width + j] = glm::vec4(color, 1.0f);
 		}
