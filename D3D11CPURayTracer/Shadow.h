@@ -5,6 +5,8 @@
 
 class Shadow : public App {
 public:
+	virtual ~Shadow() override = default;
+
 	virtual bool init(HWND h_wnd) override;
 	virtual void update() override;
 	virtual void render() override;

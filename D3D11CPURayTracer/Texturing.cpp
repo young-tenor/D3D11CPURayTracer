@@ -12,7 +12,7 @@ bool Texturing::init(HWND h_wnd) {
 		glm::vec3(0.5f, 0.5f, 1.0f),
 		glm::vec3(0.5f, -0.5f, 1.0f),
 		glm::vec3(-0.5f, -0.5f, 1.0f),
-		glm::vec3(1.0f, 1.0f, 1.0f),
+		glm::vec3(1.0f),
 		glm::vec2(0.0f, 0.0f),
 		glm::vec2(1.0f, 0.0f),
 		glm::vec2(1.0f, 1.0f),
@@ -22,9 +22,9 @@ bool Texturing::init(HWND h_wnd) {
 	for (int i = 0; i < 4; i++) {
 		for (int j = 0; j < 4; j++) {
 			if ((i + j) % 2 == 0) {
-				texture[i][j] = glm::vec3(0.0f, 0.0f, 0.0f);
+				texture[i][j] = glm::vec3(0.0f);
 			} else {
-				texture[i][j] = glm::vec3(1.0f, 1.0f, 1.0f);
+				texture[i][j] = glm::vec3(1.0f);
 			}
 		}
 	}
