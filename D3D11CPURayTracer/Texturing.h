@@ -16,5 +16,6 @@ private:
 	Texture *texture = nullptr;
 	bool linear_sampling = false;
 	bool wrap = false;
+	bool expand = false;
 };
 

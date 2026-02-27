@@ -38,12 +38,18 @@ void Texturing::update() {
 		linear_sampling = true;
 	}
 
+	ImGui::Separator();
+
 	if (ImGui::RadioButton("clamp", wrap == false)) {
 		wrap = false;
 	}
 	if (ImGui::RadioButton("wrap", wrap == true)) {
 		wrap = true;
 	}
+
+	ImGui::Separator();
+
+	ImGui::Checkbox("expand", &expand);
 
 	ImGui::End();
 
@@ -58,6 +64,10 @@ void Texturing::update() {
 			Hit hit = rect->intersect(ray);
 			if (hit.d < 0.0f) {
 				continue;
+			}
+
+			if (expand) {
+				hit.uv *= glm::vec2(4.0f);
 			}
 
 			glm::vec3 color;
