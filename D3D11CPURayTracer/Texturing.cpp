@@ -52,7 +52,13 @@ void Texturing::update() {
 			if (hit.d < 0.0f) {
 				continue;
 			}
-			auto color = texture->sample_point(hit.uv);
+
+			glm::vec3 color;
+			if (linear_sampling) {
+				color = texture->sample_linear(hit.uv);
+			} else {
+				color = texture->sample_point(hit.uv);
+			}
 			canvas_data[i * width + j] = glm::vec4(color, 1.0f);
 		}
 	}
