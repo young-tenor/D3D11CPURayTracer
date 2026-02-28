@@ -32,6 +32,7 @@ Hit Sphere::intersect(Ray ray) {
 	}
 	hit.pos = ray.orig + hit.d * ray.dir;
 	hit.normal = glm::normalize(hit.pos - center);
+	hit.obj = this;
 
 	return hit;
 }

@@ -5,9 +5,9 @@ class Sphere : public Object {
 public:
 	Sphere(float radius, glm::vec3 center);
 	Sphere(float radius, glm::vec3 center, glm::vec3 ambient);
-	virtual ~Sphere() override = default;
+	~Sphere() override = default;
 
-	virtual Hit intersect(Ray ray) override;
+	Hit intersect(Ray ray) override;
 
 public:
 	float radius = 0.0f;

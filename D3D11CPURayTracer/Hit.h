@@ -1,4 +1,7 @@
 #pragma once
+#include <glm/glm.hpp>
+
+class Object;
 
 class Hit {
 public:
@@ -9,4 +12,5 @@ public:
 	glm::vec3 pos;
 	glm::vec3 normal;
 	glm::vec2 uv;
+	Object *obj = nullptr;
 };

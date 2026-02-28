@@ -13,13 +13,14 @@ bool Texturing::init(HWND h_wnd) {
 		glm::vec3(0.5f, -0.5f, 1.0f),
 		glm::vec3(-0.5f, -0.5f, 1.0f),
 		glm::vec3(1.0f),
+		glm::vec3(0.0f),
+		glm::vec3(0.0f),
 		glm::vec2(0.0f, 0.0f),
 		glm::vec2(1.0f, 0.0f),
 		glm::vec2(1.0f, 1.0f),
 		glm::vec2(0.0f, 1.0f));
-
-	// texture
-	texture = new Texture(4.0f, 4.0f);
+	rect->texture = new Texture(4, 4);
+	objects.push_back(rect);
 
 	return true;
 }
@@ -63,23 +64,8 @@ void Texturing::update() {
 	for (int i = 0; i < height; i++) {
 		for (int j = 0; j < width; j++) {
 			auto pos_world = screen_to_world(glm::vec3((float)j, (float)i, 0.0f));
-			Ray ray(pos_world, glm::vec3(0.0f, 0.0f, 1.0f));
-			Hit hit = rect->intersect(ray);
-			if (hit.d < 0.0f) {
-				continue;
-			}
-
-			if (expand) {
-				hit.uv *= glm::vec2(4.0f);
-			}
-
-			glm::vec3 color;
-			if (linear_sampling) {
-				color = texture->sample_linear(hit.uv, wrap);
-			} else {
-				color = texture->sample_point(hit.uv, wrap);
-			}
-			canvas_data[i * width + j] = glm::vec4(color, 1.0f);
+			auto ray_dir = glm::vec3(0.0f, 0.0f, 1.0f);
+			canvas_data[i * width + j] = glm::vec4(trace_ray(pos_world, ray_dir), 1.0f);
 		}
 	}
 

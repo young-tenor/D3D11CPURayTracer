@@ -55,5 +55,7 @@ Hit Triangle::intersect(Ray ray) {
 	auto area_sum = area0 + area1 + area2;
 	hit.uv = (area0 * uv0 + area1 * uv1 + area2 * uv2) / area_sum;
 
+	hit.obj = this;
+
 	return hit;
 }

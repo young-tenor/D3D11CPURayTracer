@@ -1,6 +1,7 @@
 #pragma once
 #include "Object.h"
 #include "Light.h"
+#include "Hit.h"
 
 class App {
 public:
@@ -12,12 +13,8 @@ public:
 
 protected:
 	glm::vec3 screen_to_world(glm::vec3 pos);
-	glm::vec3 blinn_phong(
-		glm::vec3 normal,
-		glm::vec3 light_dir,
-		glm::vec3 cam_dir,
-		float light_strength,
-		Object *object);
+	glm::vec3 trace_ray(glm::vec3 pos, glm::vec3 dir);
+	glm::vec3 blinn_phong(Hit hit, glm::vec3 light_dir, glm::vec3 cam_dir,	float light_strength);
 
 protected:
 	HWND h_wnd = nullptr;
@@ -39,5 +36,11 @@ protected:
 	std::vector<glm::vec4> canvas_data;
 	ID3D11SamplerState *sampler = nullptr;
 
+	bool draw_shadow = false;
+	bool linear_sampling = false;
+	bool wrap = false;
+	bool expand = false;
+
 	Light *light = nullptr;
+	std::vector<Object *> objects;
 };

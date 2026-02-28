@@ -155,18 +155,67 @@ glm::vec3 App::screen_to_world(glm::vec3 pos) {
 	return glm::vec3(x, -y, 0.0f);
 }
 
+glm::vec3 App::trace_ray(glm::vec3 pos, glm::vec3 dir) {
+	Ray ray(pos, dir);
+
+	Hit closest_hit(-1.0f, glm::vec3(0.0f, 0.0f, -1.0f));
+	float min_d = 100.0f;
+	for (auto &object : objects) {
+		Hit hit = object->intersect(ray);
+		if (hit.d < 0.0f || hit.d > min_d) {
+			continue;
+		}
+		closest_hit = hit;
+		min_d = hit.d;
+	}
+	if (!closest_hit.obj) {
+		return glm::vec3(0.0f);
+	}
+
+	if (expand) {
+		closest_hit.uv *= 4.0f;
+	}
+
+	auto light_vec = glm::normalize(light->pos - closest_hit.pos);
+	auto cam_dir = glm::normalize(-ray.dir);
+	auto color = blinn_phong(closest_hit, light_vec, cam_dir, light->strength);
+
+	if (draw_shadow) {
+		Ray shadow_ray(closest_hit.pos + closest_hit.normal * 1e-3f, light_vec);
+		bool is_shadowed = false;
+		for (auto &object : objects) {
+			Hit hit = object->intersect(shadow_ray);
+			if (hit.d < 0.0f) {
+				continue;
+			}
+			is_shadowed = true;
+			break;
+		}
+		if (is_shadowed) {
+			color = closest_hit.obj->ambient;
+			if (closest_hit.obj->texture) {
+				color *= closest_hit.obj->texture->sample_point(closest_hit.uv, false);
+			}
+		}
+	}
+
+	return color;
+}
+
 // https://en.wikipedia.org/wiki/Blinn%E2%80%93Phong_reflection_model
-glm::vec3 App::blinn_phong(
-	glm::vec3 normal,
-	glm::vec3 light_dir,
-	glm::vec3 cam_dir,
-	float light_strength,
-	Object *object) {
+glm::vec3 App::blinn_phong(Hit hit, glm::vec3 light_dir, glm::vec3 cam_dir, float light_strength) {
 	auto halfway = glm::normalize(light_dir + cam_dir);
 
-	auto ambient = object->ambient;
-	auto diffuse = glm::max(glm::dot(normal, light_dir), 0.0f) * object->diffuse;
-	auto specular = glm::pow(glm::max(glm::dot(normal, halfway), 0.0f), object->shininess) * object->specular;
+	auto ambient = hit.obj->ambient;
+	if (hit.obj->texture) {
+		if (linear_sampling) {
+			ambient *= hit.obj->texture->sample_linear(hit.uv, wrap);
+		} else {
+			ambient *= hit.obj->texture->sample_point(hit.uv, wrap);
+		}
+	}
+	auto diffuse = glm::max(glm::dot(hit.normal, light_dir), 0.0f) * hit.obj->diffuse;
+	auto specular = glm::pow(glm::max(glm::dot(hit.normal, halfway), 0.0f), hit.obj->shininess) * hit.obj->specular;
 	auto color = ambient + (diffuse + specular) * light_strength;
 
 	return color;

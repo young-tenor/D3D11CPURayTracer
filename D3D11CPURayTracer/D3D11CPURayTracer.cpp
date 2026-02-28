@@ -29,7 +29,7 @@ int main() {
 	auto shadow = new Shadow();
 	auto texturing = new Texturing();
 
-	App *app = blinn_phong;
+	App *app = texturing;
 
 	if (!app->init(hWnd)) {
 		std::cout << "init() failed." << std::endl;

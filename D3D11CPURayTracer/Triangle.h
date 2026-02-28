@@ -11,9 +11,9 @@ public:
 		glm::vec2 uv0,
 		glm::vec2 uv1,
 		glm::vec2 uv2);
-	virtual ~Triangle() override = default;
+	~Triangle() override = default;
 
-	virtual Hit intersect(Ray ray) override;
+	Hit intersect(Ray ray) override;
 
 public:
 	glm::vec3 v0;

@@ -13,9 +13,5 @@ public:
 
 private:
 	Rect *rect = nullptr;
-	Texture *texture = nullptr;
-	bool linear_sampling = false;
-	bool wrap = false;
-	bool expand = false;
 };
 

@@ -1,7 +1,6 @@
 #pragma once
 #include "App.h"
 #include "Light.h";
-#include "Sphere.h";
 
 class Projection : public App {
 public:
@@ -12,6 +11,5 @@ public:
 	void render() override;
 
 private:
-	std::vector<Object *> spheres;
-	bool use_perspective = false;
+	bool perspective = false;
 };

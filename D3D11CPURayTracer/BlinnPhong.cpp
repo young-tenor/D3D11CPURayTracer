@@ -11,6 +11,7 @@ bool BlinnPhong::init(HWND h_wnd) {
 
 	// object
 	sphere = new Sphere(0.5f, glm::vec3(0.0f, 0.0f, 0.5f));
+	objects.push_back(sphere);
 
 	return true;
 }
@@ -52,18 +53,8 @@ void BlinnPhong::update() {
 	for (int i = 0; i < height; i++) {
 		for (int j = 0; j < width; j++) {
 			auto pos_world = screen_to_world(glm::vec3((float)j, (float)i, 0.0f));
-			Ray ray(pos_world, glm::vec3(0.0f, 0.0f, 1.0f));
-			Hit hit = sphere->intersect(ray);
-			if (hit.d < 0.0f) {
-				continue;
-			}
-			auto light_vec = glm::normalize(light->pos - hit.pos);
-
-			auto cam_dir = glm::normalize(-ray.dir);
-
-			auto color = blinn_phong(hit.normal, light_vec, cam_dir, light->strength, sphere);
-
-			canvas_data[i * width + j] = glm::vec4(color, 1.0f);
+			auto ray_dir = glm::vec3(0.0f, 0.0f, 1.0f);
+			canvas_data[i * width + j] = glm::vec4(trace_ray(pos_world, ray_dir), 1.0f);
 		}
 	}
 

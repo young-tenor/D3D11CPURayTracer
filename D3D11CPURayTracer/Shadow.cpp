@@ -33,10 +33,6 @@ void Shadow::update() {
 
 	ImGui::Checkbox("draw shadow", &draw_shadow);
 
-	ImGui::BeginDisabled(!draw_shadow);
-	ImGui::Checkbox("use ray bias", &use_ray_bias);
-	ImGui::EndDisabled();
-
 	ImGui::End();
 
 	// objects
@@ -48,51 +44,7 @@ void Shadow::update() {
 			auto pos_world = screen_to_world(glm::vec3((float)j, (float)i, 0.0f));
 			auto cam_pos = glm::vec3(0.0f, 0.0f, -1.0f);
 			auto ray_dir = glm::normalize(pos_world - cam_pos);
-			Ray ray(pos_world, ray_dir);
-
-			Object *closest_obj = nullptr;
-			Hit closest_hit(-1.0f, glm::vec3(0.0f, 0.0f, -1.0f));
-			float min_d = 100.0f;
-			for (auto &object : objects) {
-				Hit hit = object->intersect(ray);
-				if (hit.d < 0.0f || hit.d > min_d) {
-					continue;
-				}
-				closest_obj = object;
-				closest_hit = hit;
-				min_d = hit.d;
-			}
-			if (!closest_obj) {
-				continue;
-			}
-
-			auto light_vec = glm::normalize(light->pos - closest_hit.pos);
-
-			if (draw_shadow) {
-				float bias = use_ray_bias ? 1e-3f : 0.0f;
-				Ray shadow_ray(closest_hit.pos + closest_hit.normal * bias, light_vec);
-				bool is_shadowed = false;
-				for (auto &object : objects) {
-					Hit hit = object->intersect(shadow_ray);
-					if (hit.d < 0.0f) {
-						continue;
-					}
-					is_shadowed = true;
-					break;
-				}
-
-				if (is_shadowed) {
-					auto color = closest_obj->ambient;
-					canvas_data[i * width + j] = glm::vec4(color, 1.0f);
-					continue;
-				}
-			}
-
-			auto cam_dir = glm::normalize(-ray.dir);
-
-			auto color = blinn_phong(closest_hit.normal, light_vec, cam_dir, light->strength, closest_obj);
-
-			canvas_data[i * width + j] = glm::vec4(color, 1.0f);
+			canvas_data[i * width + j] = glm::vec4(trace_ray(pos_world, ray_dir), 1.0f);
 		}
 	}
 

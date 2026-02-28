@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Projection.h"
+#include "Sphere.h"
 
 bool Projection::init(HWND h_wnd) {
 	if (!App::init(h_wnd)) {
@@ -10,8 +11,8 @@ bool Projection::init(HWND h_wnd) {
 	light = new Light(1.0f, glm::vec3(0.0f, 1.0f, -1.0f));
 
 	// objects
-	spheres.push_back(new Sphere(0.5f, glm::vec3(-0.25f, 0.0f, 0.5f), glm::vec3(1.0f, 0.0f, 0.0f))); // left, front, red
-	spheres.push_back(new Sphere(0.5f, glm::vec3(0.25f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 1.0f))); // right, back, blue
+	objects.push_back(new Sphere(0.5f, glm::vec3(-0.25f, 0.0f, 0.5f), glm::vec3(1.0f, 0.0f, 0.0f)));
+	objects.push_back(new Sphere(0.5f, glm::vec3(0.25f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 1.0f)));
 
 	return true;
 }
@@ -23,11 +24,11 @@ void Projection::update() {
 
 	ImGui::Begin("Perspective Projection");
 
-	if (ImGui::RadioButton("orthographic", use_perspective == false)) {
-		use_perspective = false;
+	if (ImGui::RadioButton("orthographic", perspective == false)) {
+		perspective = false;
 	}
-	if (ImGui::RadioButton("perspective", use_perspective == true)) {
-		use_perspective = true;
+	if (ImGui::RadioButton("perspective", perspective == true)) {
+		perspective = true;
 	}
 
 	ImGui::End();
@@ -39,51 +40,16 @@ void Projection::update() {
 	for (int i = 0; i < height; i++) {
 		for (int j = 0; j < width; j++) {
 			auto pos_world = screen_to_world(glm::vec3((float)j, (float)i, 0.0f));
-			if (use_perspective) {
+
+			glm::vec3 ray_dir;
+			if (perspective) {
 				auto cam_pos = glm::vec3(0.0f, 0.0f, -1.0f);
-				auto ray_dir = glm::normalize(pos_world - cam_pos);
-				Ray ray(pos_world, ray_dir);
-
-				Object *closest_sphere = nullptr;
-				Hit closest_hit(-1.0f, glm::vec3(0.0f, 0.0f, -1.0f));
-				float min_d = 100.0f;
-				for (auto &sphere : spheres) {
-					Hit hit = sphere->intersect(ray);
-					if (hit.d < 0.0f || hit.d > min_d) {
-						continue;
-					}
-					closest_sphere = sphere;
-					closest_hit = hit;
-					min_d = hit.d;
-				}
-				if (!closest_sphere) {
-					continue;
-				}
-
-				auto light_vec = glm::normalize(light->pos - closest_hit.pos);
-
-				auto cam_dir = glm::normalize(-ray.dir);
-
-				auto color = blinn_phong(closest_hit.normal, light_vec, cam_dir, light->strength, closest_sphere);
-
-				canvas_data[i * width + j] = glm::vec4(color, 1.0f);
+				ray_dir = glm::normalize(pos_world - cam_pos);
 			} else {
-				Ray ray(pos_world, glm::vec3(0.0f, 0.0f, 1.0f));
-				for (auto &sphere : spheres) {
-					Hit hit = sphere->intersect(ray);
-					if (hit.d < 0.0f) {
-						continue;
-					}
-
-					auto light_vec = glm::normalize(light->pos - hit.pos);
-
-					auto cam_dir = glm::normalize(-ray.dir);
-
-					auto color = blinn_phong(hit.normal, light_vec, cam_dir, light->strength, sphere);
-
-					canvas_data[i * width + j] = glm::vec4(color, 1.0f);
-				}
+				ray_dir = glm::vec3(0.0f, 0.0f, 1.0f);
 			}
+
+			canvas_data[i * width + j] = glm::vec4(trace_ray(pos_world, ray_dir), 1.0f);
 		}
 	}
 
