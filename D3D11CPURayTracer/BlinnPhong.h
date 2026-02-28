@@ -12,6 +12,5 @@ public:
 	virtual void render() override;
 
 private:
-	Light *light = nullptr;
 	Object *sphere = nullptr;
 };

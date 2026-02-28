@@ -1,5 +1,6 @@
 #pragma once
 #include "Object.h"
+#include "Light.h"
 
 class App {
 public:
@@ -37,4 +38,6 @@ protected:
 	ID3D11ShaderResourceView *canvas_srv = nullptr;
 	std::vector<glm::vec4> canvas_data;
 	ID3D11SamplerState *sampler = nullptr;
+
+	Light *light = nullptr;
 };

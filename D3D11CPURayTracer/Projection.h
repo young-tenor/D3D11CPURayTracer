@@ -12,7 +12,6 @@ public:
 	virtual void render() override;
 
 private:
-	Light *light = nullptr;
 	std::vector<Object *> spheres;
 	bool use_perspective = false;
 };

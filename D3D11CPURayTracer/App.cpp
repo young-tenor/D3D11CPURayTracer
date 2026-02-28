@@ -131,6 +131,9 @@ bool App::init(HWND h_wnd) {
 		return false;
 	}
 
+	// light
+	light = new Light(1.0f, glm::vec3(0.0f, 1.0f, -1.0f));
+
 	// GUI
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
