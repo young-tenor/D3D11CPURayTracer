@@ -5,11 +5,11 @@
 
 class Shadow : public App {
 public:
-	virtual ~Shadow() override = default;
+	~Shadow() override = default;
 
-	virtual bool init(HWND h_wnd) override;
-	virtual void update() override;
-	virtual void render() override;
+	bool init(HWND h_wnd) override;
+	void update() override;
+	void render() override;
 
 private:
 	std::vector<Object *> objects;

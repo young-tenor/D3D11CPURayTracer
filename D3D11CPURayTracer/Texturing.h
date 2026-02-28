@@ -5,11 +5,11 @@
 
 class Texturing : public App {
 public:
-	virtual ~Texturing() override = default;
+	~Texturing() override = default;
 
-	virtual bool init(HWND h_wnd) override;
-	virtual void update() override;
-	virtual void render() override;
+	bool init(HWND h_wnd) override;
+	void update() override;
+	void render() override;
 
 private:
 	Rect *rect = nullptr;
