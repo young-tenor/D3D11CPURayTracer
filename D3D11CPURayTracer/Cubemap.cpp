@@ -18,13 +18,13 @@ bool Cubemap::init(const std::string &nx, const std::string &px, const std::stri
 glm::vec3 Cubemap::sample(const glm::vec3 &dir) {
 	glm::vec3 d = glm::normalize(dir);
 
-	auto abs_x = glm::abs(d.x);
-	auto abs_y = glm::abs(d.y);
-	auto abs_z = glm::abs(d.z);
+	const float abs_x = glm::abs(d.x);
+	const float abs_y = glm::abs(d.y);
+	const float abs_z = glm::abs(d.z);
 
-	bool is_x_positive = d.x > 0.0f;
-	bool is_y_positive = d.y > 0.0f;
-	bool is_z_positive = d.z > 0.0f;
+	const bool is_x_positive = d.x > 0.0f;
+	const bool is_y_positive = d.y > 0.0f;
+	const bool is_z_positive = d.z > 0.0f;
 
 	float max_axis, uc, vc;
 	Texture *target = nullptr;
@@ -65,8 +65,8 @@ glm::vec3 Cubemap::sample(const glm::vec3 &dir) {
 	}
 
 	// [-max_axis, max_axis] -> [0, 1]
-	auto u = 0.5f * (uc / max_axis + 1.0f);
-	auto v = 1.0f - 0.5f * (vc / max_axis + 1.0f);
+	const float u = 0.5f * (uc / max_axis + 1.0f);
+	const float v = 1.0f - 0.5f * (vc / max_axis + 1.0f);
 
 	if (!target) {
 		return glm::vec3(0.0f);

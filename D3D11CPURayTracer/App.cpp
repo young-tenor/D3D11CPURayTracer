@@ -150,8 +150,8 @@ bool App::init(HWND h_wnd) {
 
 // [0, w - 1] * [0, h - 1] -> [-aspect, aspect] * [-1, 1]
 glm::vec3 App::screen_to_world(const glm::vec3 &pos) {
-	auto x = pos.x * 2.0f * aspect / (width - 1) - aspect;
-	auto y = pos.y * 2.0f / (height - 1) - 1.0f;
+	const float x = pos.x * 2.0f * aspect / (width - 1) - aspect;
+	const float y = pos.y * 2.0f / (height - 1) - 1.0f;
 	return glm::vec3(x, -y, 0.0f);
 }
 
@@ -160,12 +160,12 @@ glm::vec3 App::trace_ray(const glm::vec3 &pos, const glm::vec3 &dir, const int l
 		return glm::vec3(0.0f);
 	}
 
-	Ray ray(pos, dir);
+	const Ray ray(pos, dir);
 	Hit closest_hit(-1.0f, glm::vec3(0.0f, 0.0f, -1.0f));
 	float min_d = 100.0f;
 
-	for (auto &object : objects) {
-		Hit hit = object->intersect(ray);
+	for (const auto &object : objects) {
+		const Hit hit = object->intersect(ray);
 		if (hit.d < 0.0f || hit.d > min_d) {
 			continue;
 		}
@@ -184,21 +184,21 @@ glm::vec3 App::trace_ray(const glm::vec3 &pos, const glm::vec3 &dir, const int l
 		closest_hit.uv *= 4.0f;
 	}
 
-	auto light_vec = glm::normalize(light->pos - closest_hit.pos);
-	auto cam_dir = glm::normalize(-ray.dir);
+	const auto light_vec = glm::normalize(light->pos - closest_hit.pos);
+	const auto cam_dir = glm::normalize(-ray.dir);
 	auto color = blinn_phong(closest_hit, light_vec, cam_dir, light->strength);
 
 	if (closest_hit.obj->reflection > 0.0f) {
-		glm::vec3 reflect_dir = glm::reflect(ray.dir, closest_hit.normal);
-		glm::vec3 reflected_color = trace_ray(closest_hit.pos + reflect_dir * 1e-3f, reflect_dir, level - 1);
+		const glm::vec3 reflect_dir = glm::reflect(ray.dir, closest_hit.normal);
+		const glm::vec3 reflected_color = trace_ray(closest_hit.pos + reflect_dir * 1e-3f, reflect_dir, level - 1);
 		color = glm::mix(color, reflected_color, closest_hit.obj->reflection);
 	}
 
 	if (draw_shadow) {
-		Ray shadow_ray(closest_hit.pos + closest_hit.normal * 1e-3f, light_vec);
+		const Ray shadow_ray(closest_hit.pos + closest_hit.normal * 1e-3f, light_vec);
 		bool is_shadowed = false;
-		for (auto &object : objects) {
-			Hit hit = object->intersect(shadow_ray);
+		for (const auto &object : objects) {
+			const Hit hit = object->intersect(shadow_ray);
 			if (hit.d < 0.0f) {
 				continue;
 			}
@@ -218,7 +218,7 @@ glm::vec3 App::trace_ray(const glm::vec3 &pos, const glm::vec3 &dir, const int l
 
 // https://en.wikipedia.org/wiki/Blinn%E2%80%93Phong_reflection_model
 glm::vec3 App::blinn_phong(const Hit &hit, const glm::vec3 &light_dir, const glm::vec3 &cam_dir, const float light_strength) {
-	auto halfway = glm::normalize(light_dir + cam_dir);
+	const auto halfway = glm::normalize(light_dir + cam_dir);
 
 	auto ambient = hit.obj->ambient;
 	if (hit.obj->texture) {
@@ -228,9 +228,9 @@ glm::vec3 App::blinn_phong(const Hit &hit, const glm::vec3 &light_dir, const glm
 			ambient *= hit.obj->texture->sample_point(hit.uv, wrap);
 		}
 	}
-	auto diffuse = glm::max(glm::dot(hit.normal, light_dir), 0.0f) * hit.obj->diffuse;
-	auto specular = glm::pow(glm::max(glm::dot(hit.normal, halfway), 0.0f), hit.obj->shininess) * hit.obj->specular;
-	auto color = ambient + (diffuse + specular) * light_strength;
+	const auto diffuse = glm::max(glm::dot(hit.normal, light_dir), 0.0f) * hit.obj->diffuse;
+	const auto specular = glm::pow(glm::max(glm::dot(hit.normal, halfway), 0.0f), hit.obj->shininess) * hit.obj->specular;
+	const auto color = ambient + (diffuse + specular) * light_strength;
 
 	return color;
 }

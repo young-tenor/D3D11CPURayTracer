@@ -17,11 +17,11 @@ Sphere::Sphere(const float radius, const glm::vec3 &center, const glm::vec3 &amb
 Hit Sphere::intersect(const Ray &ray) {
 	Hit hit(-1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
 
-	float a = glm::dot(ray.dir, ray.dir);
-	float b = 2.0f * glm::dot(ray.dir, ray.orig - center);
-	float c = glm::dot(ray.orig - center, ray.orig - center) - radius * radius;
+	const float a = glm::dot(ray.dir, ray.dir);
+	const float b = 2.0f * glm::dot(ray.dir, ray.orig - center);
+	const float c = glm::dot(ray.orig - center, ray.orig - center) - radius * radius;
 
-	float nabla = b * b - 4.0f * a * c;
+	const float nabla = b * b - 4.0f * a * c;
 	if (nabla < 0.0f) {
 		return hit;
 	}

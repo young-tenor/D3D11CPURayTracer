@@ -25,11 +25,11 @@ int main() {
 		return -1;
 	}
 
-	auto blinn_phong = new BlinnPhong();
-	auto projection = new Projection();
-	auto shadow = new Shadow();
-	auto texturing = new Texturing();
-	auto reflection = new Reflection();
+	const auto blinn_phong = new BlinnPhong();
+	const auto projection = new Projection();
+	const auto shadow = new Shadow();
+	const auto texturing = new Texturing();
+	const auto reflection = new Reflection();
 
 	App *app = reflection;
 

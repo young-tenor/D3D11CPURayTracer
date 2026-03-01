@@ -47,13 +47,13 @@ void BlinnPhong::update() {
 	ImGui::End();
 
 	// object
-	auto clear_color = glm::vec4(0.1f, 0.2f, 0.4f, 1.0f);
+	const auto clear_color = glm::vec4(0.1f, 0.2f, 0.4f, 1.0f);
 	fill(canvas_data.begin(), canvas_data.end(), clear_color);
 
 	for (int i = 0; i < height; i++) {
 		for (int j = 0; j < width; j++) {
-			auto pos_world = screen_to_world(glm::vec3((float)j, (float)i, 0.0f));
-			auto ray_dir = glm::vec3(0.0f, 0.0f, 1.0f);
+			const auto pos_world = screen_to_world(glm::vec3((float)j, (float)i, 0.0f));
+			const auto ray_dir = glm::vec3(0.0f, 0.0f, 1.0f);
 			canvas_data[i * width + j] = glm::vec4(trace_ray(pos_world, ray_dir), 1.0f);
 		}
 	}

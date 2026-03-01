@@ -41,9 +41,9 @@ glm::vec3 Texture::wrapped_color(int i, int j) {
 }
 
 glm::vec3 Texture::sample_point(const glm::vec2 &uv, const bool wrap) {
-	auto xy = uv * glm::vec2(width, height) - glm::vec2(0.5f);
-	int i = std::round(xy.y);
-	int j = std::round(xy.x);
+	const auto xy = uv * glm::vec2(width, height) - glm::vec2(0.5f);
+	const int i = std::round(xy.y);
+	const int j = std::round(xy.x);
 	glm::vec3 color;
 	if (wrap) {
 		color = wrapped_color(i, j);
@@ -54,11 +54,11 @@ glm::vec3 Texture::sample_point(const glm::vec2 &uv, const bool wrap) {
 }
 
 glm::vec3 Texture::sample_linear(const glm::vec2 &uv, const bool wrap) {
-	auto xy = uv * glm::vec2(width, height) - glm::vec2(0.5f);
-	int i = std::floor(xy.y);
-	int j = std::floor(xy.x);
-	float dy = xy.y - i;
-	float dx = xy.x - j;
+	const auto xy = uv * glm::vec2(width, height) - glm::vec2(0.5f);
+	const int i = std::floor(xy.y);
+	const int j = std::floor(xy.x);
+	const float dy = xy.y - i;
+	const float dx = xy.x - j;
 
 	glm::vec3 c00, c10, c01, c11;
 	if (wrap) {
@@ -73,12 +73,12 @@ glm::vec3 Texture::sample_linear(const glm::vec2 &uv, const bool wrap) {
 		c11 = clamped_color(i + 1, j + 1);
 	}
 
-	//auto top = c00 * (1.0f - dx) + c01 * dx;
-	//auto bot = c10 * (1.0f - dx) + c11 * dx;
-	//auto color = top * (1.0f - dy) + bot * dy;
-	auto top = glm::mix(c00, c01, dx);
-	auto bot = glm::mix(c10, c11, dx);
-	auto color = glm::mix(top, bot, dy);
+	//const auto top = c00 * (1.0f - dx) + c01 * dx;
+	//const auto bot = c10 * (1.0f - dx) + c11 * dx;
+	//const auto color = top * (1.0f - dy) + bot * dy;
+	const auto top = glm::mix(c00, c01, dx);
+	const auto bot = glm::mix(c10, c11, dx);
+	const auto color = glm::mix(top, bot, dy);
 
 	return color;
 }

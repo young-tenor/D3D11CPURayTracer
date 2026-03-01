@@ -7,12 +7,12 @@ bool Reflection::init(HWND h_wnd) {
 	}
 
 	// cubemap
-	std::string nx = "./nx.jpg";
-	std::string px = "./px.jpg";
-	std::string ny = "./ny.jpg";
-	std::string py = "./py.jpg";
-	std::string nz = "./nz.jpg";
-	std::string pz = "./pz.jpg";
+	const std::string nx = "./nx.jpg";
+	const std::string px = "./px.jpg";
+	const std::string ny = "./ny.jpg";
+	const std::string py = "./py.jpg";
+	const std::string nz = "./nz.jpg";
+	const std::string pz = "./pz.jpg";
 
 	cubemap = new Cubemap();
 	if (!cubemap->init(nx, px, ny, py, nz, pz)) {
@@ -38,14 +38,14 @@ void Reflection::update() {
 
 	ImGui::End();
 
-	auto clear_color = glm::vec4(0.1f, 0.2f, 0.4f, 1.0f);
+	const auto clear_color = glm::vec4(0.1f, 0.2f, 0.4f, 1.0f);
 	std::fill(canvas_data.begin(), canvas_data.end(), clear_color);
 
 	for (int i = 0; i < height; i++) {
 		for (int j = 0; j < width; j++) {
-			auto pos_world = screen_to_world(glm::vec3((float)j, (float)i, 0.0f));
-			auto cam_pos = glm::vec3(0.0f, 0.0f, -1.0f);
-			auto ray_dir = glm::normalize(pos_world - cam_pos);
+			const auto pos_world = screen_to_world(glm::vec3((float)j, (float)i, 0.0f));
+			const auto cam_pos = glm::vec3(0.0f, 0.0f, -1.0f);
+			const auto ray_dir = glm::normalize(pos_world - cam_pos);
 			canvas_data[i * width + j] = glm::vec4(trace_ray(pos_world, ray_dir, 3), 1.0f);
 		}
 	}

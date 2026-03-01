@@ -40,8 +40,8 @@ Rect::Rect(
 }
 
 Hit Rect::intersect(const Ray &ray) {
-	auto hit1 = triangle1.intersect(ray);
-	auto hit2 = triangle2.intersect(ray);
+	const auto hit1 = triangle1.intersect(ray);
+	const auto hit2 = triangle2.intersect(ray);
 	Hit closer_hit(-1.0f, glm::vec3(0.0f, 0.0f, -1.0f));
 	if ((hit1.d >= 0.0f && (hit2.d < 0.0f || hit1.d < hit2.d))) {
 		closer_hit = hit1;
