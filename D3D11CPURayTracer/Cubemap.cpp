@@ -14,6 +14,7 @@ bool Cubemap::init(const std::string &nx, const std::string &px, const std::stri
 	return true;
 }
 
+// https://en.wikipedia.org/wiki/Cube_mapping
 glm::vec3 Cubemap::sample(const glm::vec3 &dir) {
 	glm::vec3 d = glm::normalize(dir);
 
