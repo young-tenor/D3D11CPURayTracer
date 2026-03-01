@@ -150,8 +150,8 @@ bool App::init(HWND h_wnd) {
 
 // [0, w - 1] * [0, h - 1] -> [-aspect, aspect] * [-1, 1]
 glm::vec3 App::screen_to_world(const glm::vec3 &pos) {
-	float x = pos.x * 2.0f * aspect / (width - 1) - aspect;
-	float y = pos.y * 2.0f / (height - 1) - 1.0f;
+	auto x = pos.x * 2.0f * aspect / (width - 1) - aspect;
+	auto y = pos.y * 2.0f / (height - 1) - 1.0f;
 	return glm::vec3(x, -y, 0.0f);
 }
 

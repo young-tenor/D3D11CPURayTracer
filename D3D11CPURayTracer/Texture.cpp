@@ -73,9 +73,12 @@ glm::vec3 Texture::sample_linear(const glm::vec2 &uv, const bool wrap) {
 		c11 = clamped_color(i + 1, j + 1);
 	}
 
-	auto top = c00 * (1.0f - dx) + c01 * dx;
-	auto bot = c10 * (1.0f - dx) + c11 * dx;
-	auto color = top * (1.0f - dy) + bot * dy;
+	//auto top = c00 * (1.0f - dx) + c01 * dx;
+	//auto bot = c10 * (1.0f - dx) + c11 * dx;
+	//auto color = top * (1.0f - dy) + bot * dy;
+	auto top = glm::mix(c00, c01, dx);
+	auto bot = glm::mix(c10, c11, dx);
+	auto color = glm::mix(top, bot, dy);
 
 	return color;
 }
