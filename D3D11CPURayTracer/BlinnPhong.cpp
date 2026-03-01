@@ -10,7 +10,9 @@ bool BlinnPhong::init(HWND h_wnd) {
 	light = new Light(1.0f, glm::vec3(0.0f, 1.0f, -1.0f));
 
 	// object
-	sphere = new Sphere(0.5f, glm::vec3(0.0f, 0.0f, 0.5f));
+	sphere = new Sphere();
+	sphere->radius = 0.5f;
+	sphere->center = glm::vec3(0.0f, 0.0f, 0.5f);
 	objects.push_back(sphere);
 
 	return true;

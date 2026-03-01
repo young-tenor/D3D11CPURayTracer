@@ -13,8 +13,14 @@ bool Shadow::init(HWND h_wnd) {
 	light = new Light(1.0f, glm::vec3(0.0f, 1.0f, -1.0f));
 
 	// objects
-	objects.push_back(new Sphere(0.5f, glm::vec3(0.0f, 0.0f, 1.0f)));
-	objects.push_back(new Rect(glm::vec3(-2.0f, -1.0f, 4.0f), glm::vec3(2.0f, -1.0, 4.0f), glm::vec3(2.0f, -1.0, 0.0f), glm::vec3(-2.0f, -1.0, 0.0f)));
+	Sphere *sphere = new Sphere();
+	sphere->radius = 0.5f;
+	sphere->center = glm::vec3(0.0f, 0.0f, 1.0f);
+	objects.push_back(sphere);
+
+	Rect *floor = new Rect();
+	floor->set_vertices(glm::vec3(-2.0f, -1.0f, 4.0f), glm::vec3(2.0f, -1.0, 4.0f), glm::vec3(2.0f, -1.0, 0.0f), glm::vec3(-2.0f, -1.0, 0.0f));
+	objects.push_back(floor);
 
 	return true;
 }

@@ -7,22 +7,13 @@ bool Texturing::init(HWND h_wnd) {
 	}
 
 	// object
-	rect = new Rect(
-		// vertices
-		glm::vec3(-0.5f, 0.5f, 1.0f),
-		glm::vec3(0.5f, 0.5f, 1.0f),
-		glm::vec3(0.5f, -0.5f, 1.0f),
-		glm::vec3(-0.5f, -0.5f, 1.0f),
-		// material
-		glm::vec3(1.0f), // ambient
-		glm::vec3(0.0f), // diffuse
-		glm::vec3(0.0f), // specular
-		// uv
-		glm::vec2(0.0f, 0.0f), 
-		glm::vec2(1.0f, 0.0f),
-		glm::vec2(1.0f, 1.0f),
-		glm::vec2(0.0f, 1.0f));
+	rect = new Rect();
+	rect->set_vertices(glm::vec3(-0.5f, 0.5f, 1.0f), glm::vec3(0.5f, 0.5f, 1.0f), glm::vec3(0.5f, -0.5f, 1.0f), glm::vec3(-0.5f, -0.5f, 1.0f));
+	rect->set_uvs(glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 0.0f), glm::vec2(1.0f, 1.0f), glm::vec2(0.0f, 1.0f));
 	rect->texture = new Texture(4, 4);
+	rect->ambient = glm::vec3(1.0f);
+	rect->diffuse = glm::vec3(0.0f);
+	rect->specular = glm::vec3(0.0f);
 	objects.push_back(rect);
 
 	return true;

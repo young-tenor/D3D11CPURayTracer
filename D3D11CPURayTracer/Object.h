@@ -6,9 +6,6 @@
 
 class Object {
 public:
-	Object() = default;
-	Object(const glm::vec3 &ambient);
-	Object(const glm::vec3 &ambient, const glm::vec3 &diffuse, const glm::vec3 &specular);
 	virtual ~Object() = default;
 
 	virtual Hit intersect(const Ray &ray) = 0;

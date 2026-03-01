@@ -4,30 +4,10 @@
 
 class Rect : public Object {
 public:
-	Rect(const glm::vec3 &v0, const glm::vec3 &v1, const glm::vec3 &v2, const glm::vec3 &v3);
-	Rect(
-		const glm::vec3 &v0,
-		const glm::vec3 &v1,
-		const glm::vec3 &v2,
-		const glm::vec3 &v3,
-		const glm::vec3 &ambient,
-		const glm::vec2 &uv0,
-		const glm::vec2 &uv1,
-		const glm::vec2 &uv2,
-		const glm::vec2 &uv3);
-	Rect(
-		const glm::vec3 &v0,
-		const glm::vec3 &v1, 
-		const glm::vec3 &v2,
-		const glm::vec3 &v3, 
-		const glm::vec3 &ambient, 
-		const glm::vec3 &diffuse,
-		const glm::vec3 &specular,
-		const glm::vec2 &uv0,
-		const glm::vec2 &uv1,
-		const glm::vec2 &uv2,
-		const glm::vec2 &uv3);
 	~Rect() override = default;
+
+	void set_vertices(const glm::vec3 &v0, const glm::vec3 &v1, const glm::vec3 &v2, const glm::vec3 &v3);
+	void set_uvs(const glm::vec2 &uv0, const glm::vec2 &uv1, const glm::vec2 &uv2, const glm::vec2 &uv3);
 
 	Hit intersect(const Ray &ray) override;
 

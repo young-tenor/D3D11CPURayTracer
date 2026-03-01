@@ -161,7 +161,7 @@ glm::vec3 App::trace_ray(const glm::vec3 &pos, const glm::vec3 &dir, const int l
 	}
 
 	const Ray ray(pos, dir);
-	Hit closest_hit(-1.0f, glm::vec3(0.0f, 0.0f, -1.0f));
+	Hit closest_hit;
 	float min_d = 100.0f;
 
 	for (const auto &object : objects) {

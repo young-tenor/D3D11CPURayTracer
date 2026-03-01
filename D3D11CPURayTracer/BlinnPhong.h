@@ -12,5 +12,5 @@ public:
 	void render() override;
 
 private:
-	Object *sphere = nullptr;
+	Sphere *sphere = nullptr;
 };

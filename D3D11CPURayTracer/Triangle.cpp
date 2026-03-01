@@ -1,27 +1,8 @@
 #include "pch.h"
 #include "Triangle.h"
 
-Triangle::Triangle(const glm::vec3 &v0, const glm::vec3 &v1, const glm::vec3 &v2) : Object(), v0(v0), v1(v1), v2(v2) {
-}
-
-Triangle::Triangle(
-	const glm::vec3 &v0,
-	const glm::vec3 &v1,
-	const glm::vec3 &v2,
-	const glm::vec2 &uv0,
-	const glm::vec2 &uv1,
-	const glm::vec2 &uv2)
-	: Object()
-	, v0(v0)
-	, v1(v1)
-	, v2(v2)
-	, uv0(uv0)
-	, uv1(uv1)
-	, uv2(uv2) {
-}
-
 Hit Triangle::intersect(const Ray &ray) {
-	Hit hit(-1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+	Hit hit;
 
 	const auto face_normal = glm::normalize(glm::cross(v1 - v0, v2 - v1));
 	if (glm::dot(-ray.dir, face_normal) < 0.0f || std::abs(glm::dot(ray.dir, face_normal)) < 1e-3f) {
