@@ -36,7 +36,12 @@ void Reflection::update() {
 
 	ImGui::Begin("Cubemap");
 	
+	ImGui::Text("material");
 	ImGui::SliderFloat("reflection", &sphere->reflection, 0.0f, 1.0f);
+
+	ImGui::Separator();
+
+	ImGui::Checkbox("super sampling", &super_sampling);
 
 	ImGui::End();
 
@@ -48,7 +53,11 @@ void Reflection::update() {
 			const auto pos_world = screen_to_world(glm::vec3((float)j, (float)i, 0.0f));
 			const auto cam_pos = glm::vec3(0.0f, 0.0f, -1.0f);
 			const auto ray_dir = glm::normalize(pos_world - cam_pos);
-			canvas_data[i * width + j] = glm::vec4(trace_ray(pos_world, ray_dir, 3), 1.0f);
+			if (super_sampling) {
+				canvas_data[i * width + j] = glm::vec4(trace_ray_super(pos_world, ray_dir, 3), 1.0f);
+			} else {
+				canvas_data[i * width + j] = glm::vec4(trace_ray(pos_world, ray_dir, 3), 1.0f);
+			}
 		}
 	}
 

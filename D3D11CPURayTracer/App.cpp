@@ -216,6 +216,24 @@ glm::vec3 App::trace_ray(const glm::vec3 &pos, const glm::vec3 &dir, const int l
 	return color;
 }
 
+glm::vec3 App::trace_ray_super(const glm::vec3 &pos, const glm::vec3 &dir, const int level) {
+	const float dx = 2.0f / height;
+	auto color = glm::vec3(0.0f);
+
+	for (int i = 0; i < 2; i++) {
+		for (int j = 0; j < 2; j++) {
+			const float offset_x = (i - 0.5f) * 0.5f * dx;
+			const float offset_y = (j - 0.5f) * 0.5f * dx;
+			const auto ray_orig = glm::vec3(pos.x + offset_x, pos.y + offset_y, pos.z);
+			const auto ray_dir = glm::normalize(ray_orig - glm::vec3(0.0f, 0.0f, -1.0f));
+			color += trace_ray(ray_orig, ray_dir, level);
+		}
+	}
+	color /= 4.0f;
+
+	return color;
+}
+
 // https://en.wikipedia.org/wiki/Blinn%E2%80%93Phong_reflection_model
 glm::vec3 App::blinn_phong(const Hit &hit, const glm::vec3 &light_dir, const glm::vec3 &cam_dir, const float light_strength) {
 	const auto halfway = glm::normalize(light_dir + cam_dir);
