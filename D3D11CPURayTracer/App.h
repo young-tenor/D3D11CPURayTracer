@@ -12,9 +12,9 @@ public:
 	virtual void render() = 0;
 
 protected:
-	glm::vec3 screen_to_world(glm::vec3 pos);
-	glm::vec3 trace_ray(glm::vec3 pos, glm::vec3 dir);
-	glm::vec3 blinn_phong(Hit hit, glm::vec3 light_dir, glm::vec3 cam_dir,	float light_strength);
+	glm::vec3 screen_to_world(const glm::vec3 &pos);
+	glm::vec3 trace_ray(const glm::vec3 &pos, const glm::vec3 &dir);
+	glm::vec3 blinn_phong(const Hit &hit, const glm::vec3 &light_dir, const glm::vec3 &cam_dir, const float light_strength);
 
 protected:
 	HWND h_wnd = nullptr;

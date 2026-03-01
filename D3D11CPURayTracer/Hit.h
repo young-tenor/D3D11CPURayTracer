@@ -5,7 +5,7 @@ class Object;
 
 class Hit {
 public:
-	Hit(float d, glm::vec3 pos);
+	Hit(const float d, const glm::vec3 &pos);
 
 public:
 	float d = -1.0f;

@@ -149,13 +149,13 @@ bool App::init(HWND h_wnd) {
 }
 
 // [0, w - 1] * [0, h - 1] -> [-aspect, aspect] * [-1, 1]
-glm::vec3 App::screen_to_world(glm::vec3 pos) {
+glm::vec3 App::screen_to_world(const glm::vec3 &pos) {
 	float x = pos.x * 2.0f * aspect / (width - 1) - aspect;
 	float y = pos.y * 2.0f / (height - 1) - 1.0f;
 	return glm::vec3(x, -y, 0.0f);
 }
 
-glm::vec3 App::trace_ray(glm::vec3 pos, glm::vec3 dir) {
+glm::vec3 App::trace_ray(const glm::vec3 &pos, const glm::vec3 &dir) {
 	Ray ray(pos, dir);
 
 	Hit closest_hit(-1.0f, glm::vec3(0.0f, 0.0f, -1.0f));
@@ -203,7 +203,7 @@ glm::vec3 App::trace_ray(glm::vec3 pos, glm::vec3 dir) {
 }
 
 // https://en.wikipedia.org/wiki/Blinn%E2%80%93Phong_reflection_model
-glm::vec3 App::blinn_phong(Hit hit, glm::vec3 light_dir, glm::vec3 cam_dir, float light_strength) {
+glm::vec3 App::blinn_phong(const Hit &hit, const glm::vec3 &light_dir, const glm::vec3 &cam_dir, const float light_strength) {
 	auto halfway = glm::normalize(light_dir + cam_dir);
 
 	auto ambient = hit.obj->ambient;

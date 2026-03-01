@@ -3,12 +3,12 @@
 
 class Texture {
 public:
-	Texture(int width, int height);
+	Texture(const int width, const int height);
 
 	glm::vec3 clamped_color(int i, int j);
 	glm::vec3 wrapped_color(int i, int j);
-	glm::vec3 sample_point(glm::vec2 uv, bool wrap);
-	glm::vec3 sample_linear(glm::vec2 uv, bool wrap);
+	glm::vec3 sample_point(const glm::vec2 &uv, const bool wrap);
+	glm::vec3 sample_linear(const glm::vec2 &uv, const bool wrap);
 
 public:
 	int width, height;

@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Texture.h"
 
-Texture::Texture(int width, int height) : width(width), height(height) {
+Texture::Texture(const int width, const int height) : width(width), height(height) {
 	image.resize(width * height);
 	for (int i = 0; i < height; i++) {
 		for (int j = 0; j < width; j++) {
@@ -26,7 +26,7 @@ glm::vec3 Texture::wrapped_color(int i, int j) {
 	return image[i * width + j];
 }
 
-glm::vec3 Texture::sample_point(glm::vec2 uv, bool wrap) {
+glm::vec3 Texture::sample_point(const glm::vec2 &uv, const bool wrap) {
 	auto xy = uv * glm::vec2(width, height) - glm::vec2(0.5f);
 	int i = std::round(xy.y);
 	int j = std::round(xy.x);
@@ -39,7 +39,7 @@ glm::vec3 Texture::sample_point(glm::vec2 uv, bool wrap) {
 	return color;
 }
 
-glm::vec3 Texture::sample_linear(glm::vec2 uv, bool wrap) {
+glm::vec3 Texture::sample_linear(const glm::vec2 &uv, const bool wrap) {
 	auto xy = uv * glm::vec2(width, height) - glm::vec2(0.5f);
 	int i = std::floor(xy.y);
 	int j = std::floor(xy.x);

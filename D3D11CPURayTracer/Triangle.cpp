@@ -1,20 +1,16 @@
 #include "pch.h"
 #include "Triangle.h"
 
-Triangle::Triangle(glm::vec3 v0, glm::vec3 v1, glm::vec3 v2)
-	: Object()
-	, v0(v0)
-	, v1(v1)
-	, v2(v2) {
+Triangle::Triangle(const glm::vec3 &v0, const glm::vec3 &v1, const glm::vec3 &v2) : Object(), v0(v0), v1(v1), v2(v2) {
 }
 
 Triangle::Triangle(
-	glm::vec3 v0,
-	glm::vec3 v1,
-	glm::vec3 v2,
-	glm::vec2 uv0,
-	glm::vec2 uv1,
-	glm::vec2 uv2)
+	const glm::vec3 &v0,
+	const glm::vec3 &v1,
+	const glm::vec3 &v2,
+	const glm::vec2 &uv0,
+	const glm::vec2 &uv1,
+	const glm::vec2 &uv2)
 	: Object()
 	, v0(v0)
 	, v1(v1)
@@ -24,7 +20,7 @@ Triangle::Triangle(
 	, uv2(uv2) {
 }
 
-Hit Triangle::intersect(Ray ray) {
+Hit Triangle::intersect(const Ray &ray) {
 	Hit hit(-1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
 
 	auto face_normal = glm::normalize(glm::cross(v1 - v0, v2 - v1));

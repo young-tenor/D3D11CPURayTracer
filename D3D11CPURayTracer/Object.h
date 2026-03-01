@@ -7,11 +7,11 @@
 class Object {
 public:
 	Object() = default;
-	Object(glm::vec3 ambient);
-	Object(glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular);
+	Object(const glm::vec3 &ambient);
+	Object(const glm::vec3 &ambient, const glm::vec3 &diffuse, const glm::vec3 &specular);
 	virtual ~Object() = default;
 
-	virtual Hit intersect(Ray ray) = 0;
+	virtual Hit intersect(const Ray &ray) = 0;
 
 public:
 	glm::vec3 ambient = glm::vec3(0.1f);

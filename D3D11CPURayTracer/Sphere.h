@@ -3,11 +3,11 @@
 
 class Sphere : public Object {
 public:
-	Sphere(float radius, glm::vec3 center);
-	Sphere(float radius, glm::vec3 center, glm::vec3 ambient);
+	Sphere(const float radius, const glm::vec3 &center);
+	Sphere(const float radius, const glm::vec3 &center, const glm::vec3 &ambient);
 	~Sphere() override = default;
 
-	Hit intersect(Ray ray) override;
+	Hit intersect(const Ray &ray) override;
 
 public:
 	float radius = 0.0f;

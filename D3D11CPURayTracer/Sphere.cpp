@@ -1,20 +1,20 @@
 #include "pch.h"
 #include "Sphere.h"
 
-Sphere::Sphere(float radius, glm::vec3 center)
+Sphere::Sphere(const float radius, const glm::vec3 &center)
 	: Object()
 	, radius(radius)
 	, center(center) {
 }
 
-Sphere::Sphere(float radius, glm::vec3 center, glm::vec3 ambient)
+Sphere::Sphere(const float radius, const glm::vec3 &center, const glm::vec3 &ambient)
 	: Object(ambient)
 	, radius(radius)
 	, center(center) {
 }
 
 // https://en.wikipedia.org/wiki/Line%E2%80%93sphere_intersection
-Hit Sphere::intersect(Ray ray) {
+Hit Sphere::intersect(const Ray &ray) {
 	Hit hit(-1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
 
 	float a = glm::dot(ray.dir, ray.dir);

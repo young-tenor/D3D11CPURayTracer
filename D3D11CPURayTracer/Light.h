@@ -2,7 +2,7 @@
 
 class Light {
 public:
-	Light(float strength, glm::vec3 pos);
+	Light(const float strength, const glm::vec3 &pos);
 
 public:
 	float strength = 1.0f;
