@@ -137,6 +137,8 @@
   <ItemGroup>
     <ClCompile Include="App.cpp" />
     <ClCompile Include="BlinnPhong.cpp" />
+    <ClCompile Include="Cubemap.cpp" />
+    <ClCompile Include="Reflection.cpp" />
     <ClCompile Include="D3D11CPURayTracer.cpp" />
     <ClCompile Include="Hit.cpp" />
     <ClCompile Include="Light.cpp" />
@@ -159,6 +161,8 @@
   <ItemGroup>
     <ClInclude Include="App.h" />
     <ClInclude Include="BlinnPhong.h" />
+    <ClInclude Include="Cubemap.h" />
+    <ClInclude Include="Reflection.h" />
     <ClInclude Include="Hit.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="Object.h" />
@@ -179,6 +183,14 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\..\..\Downloads\LancellottiChapel\negx.jpg" />
+    <Image Include="..\..\..\..\Downloads\LancellottiChapel\negy.jpg" />
+    <Image Include="..\..\..\..\Downloads\LancellottiChapel\negz.jpg" />
+    <Image Include="..\..\..\..\Downloads\LancellottiChapel\posx.jpg" />
+    <Image Include="..\..\..\..\Downloads\LancellottiChapel\posy.jpg" />
+    <Image Include="..\..\..\..\Downloads\LancellottiChapel\posz.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

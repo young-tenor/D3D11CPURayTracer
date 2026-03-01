@@ -4,6 +4,7 @@
 #include "Projection.h"
 #include "Shadow.h"
 #include "Texturing.h"
+#include "Reflection.h"
 
 HINSTANCE hInst;
 HWND hWnd;
@@ -28,8 +29,9 @@ int main() {
 	auto projection = new Projection();
 	auto shadow = new Shadow();
 	auto texturing = new Texturing();
+	auto reflection = new Reflection();
 
-	App *app = shadow;
+	App *app = reflection;
 
 	if (!app->init(hWnd)) {
 		std::cout << "init() failed." << std::endl;

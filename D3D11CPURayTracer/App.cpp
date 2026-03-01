@@ -155,11 +155,15 @@ glm::vec3 App::screen_to_world(const glm::vec3 &pos) {
 	return glm::vec3(x, -y, 0.0f);
 }
 
-glm::vec3 App::trace_ray(const glm::vec3 &pos, const glm::vec3 &dir) {
-	Ray ray(pos, dir);
+glm::vec3 App::trace_ray(const glm::vec3 &pos, const glm::vec3 &dir, const int level) {
+	if (level < 0) {
+		return glm::vec3(0.0f);
+	}
 
+	Ray ray(pos, dir);
 	Hit closest_hit(-1.0f, glm::vec3(0.0f, 0.0f, -1.0f));
 	float min_d = 100.0f;
+
 	for (auto &object : objects) {
 		Hit hit = object->intersect(ray);
 		if (hit.d < 0.0f || hit.d > min_d) {
@@ -168,7 +172,11 @@ glm::vec3 App::trace_ray(const glm::vec3 &pos, const glm::vec3 &dir) {
 		closest_hit = hit;
 		min_d = hit.d;
 	}
+
 	if (!closest_hit.obj) {
+		if (cubemap) {
+			return cubemap->sample(dir);
+		}
 		return glm::vec3(0.0f);
 	}
 
@@ -179,6 +187,12 @@ glm::vec3 App::trace_ray(const glm::vec3 &pos, const glm::vec3 &dir) {
 	auto light_vec = glm::normalize(light->pos - closest_hit.pos);
 	auto cam_dir = glm::normalize(-ray.dir);
 	auto color = blinn_phong(closest_hit, light_vec, cam_dir, light->strength);
+
+	if (closest_hit.obj->reflection > 0.0f) {
+		glm::vec3 reflect_dir = glm::reflect(ray.dir, closest_hit.normal);
+		glm::vec3 reflected_color = trace_ray(closest_hit.pos + reflect_dir * 1e-3f, reflect_dir, level - 1);
+		color = glm::mix(color, reflected_color, closest_hit.obj->reflection);
+	}
 
 	if (draw_shadow) {
 		Ray shadow_ray(closest_hit.pos + closest_hit.normal * 1e-3f, light_vec);

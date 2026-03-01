@@ -1,5 +1,7 @@
 #include "pch.h"
 #include "Texture.h"
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 
 Texture::Texture(const int width, const int height) : width(width), height(height) {
 	image.resize(width * height);
@@ -11,6 +13,18 @@ Texture::Texture(const int width, const int height) : width(width), height(heigh
 				image[i * width + j] = glm::vec3(1.0f);
 			}
 		}
+	}
+}
+
+Texture::Texture(const std::string &filename) {
+	int channels;
+	unsigned char *data = stbi_load(filename.c_str(), &width, &height, &channels, 3);
+	if (data) {
+		image.resize(width * height);
+		for (int i = 0; i < width * height; i++) {
+			image[i] = glm::vec3(data[i * 3] / 255.0f, data[i * 3 + 1] / 255.0f, data[i * 3 + 2] / 255.0f);
+		}
+		stbi_image_free(data);
 	}
 }
 

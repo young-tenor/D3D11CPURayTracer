@@ -1,74 +1,52 @@
 #include "pch.h"
-#include "Texturing.h"
+#include "Reflection.h"
 
-bool Texturing::init(HWND h_wnd) {
+bool Reflection::init(HWND h_wnd) {
 	if (!App::init(h_wnd)) {
 		return false;
 	}
 
+	// cubemap
+	std::string nx = "./nx.jpg";
+	std::string px = "./px.jpg";
+	std::string ny = "./ny.jpg";
+	std::string py = "./py.jpg";
+	std::string nz = "./nz.jpg";
+	std::string pz = "./pz.jpg";
+
+	cubemap = new Cubemap();
+	if (!cubemap->init(nx, px, ny, py, nz, pz)) {
+		std::cout << "cubemap->init() failed" << std::endl;
+		return false;
+	}
+
 	// object
-	rect = new Rect(
-		// vertices
-		glm::vec3(-0.5f, 0.5f, 1.0f),
-		glm::vec3(0.5f, 0.5f, 1.0f),
-		glm::vec3(0.5f, -0.5f, 1.0f),
-		glm::vec3(-0.5f, -0.5f, 1.0f),
-		// material
-		glm::vec3(1.0f), // ambient
-		glm::vec3(0.0f), // diffuse
-		glm::vec3(0.0f), // specular
-		// uv
-		glm::vec2(0.0f, 0.0f), 
-		glm::vec2(1.0f, 0.0f),
-		glm::vec2(1.0f, 1.0f),
-		glm::vec2(0.0f, 1.0f));
-	rect->texture = new Texture(4, 4);
-	objects.push_back(rect);
+	sphere = new Sphere(0.5f, glm::vec3(0.0f, 0.0f, 0.5f));
+	objects.push_back(sphere);
 
 	return true;
 }
 
-void Texturing::update() {
+void Reflection::update() {
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
 
-	ImGui::Begin("Texturing");
-
-	ImGui::Text("sampling mode");
-	if (ImGui::RadioButton("point sampling", linear_sampling == false)) {
-		linear_sampling = false;
-	}
-	if (ImGui::RadioButton("linear sampling", linear_sampling == true)) {
-		linear_sampling = true;
-	}
-
-	ImGui::Separator();
-
-	ImGui::Text("address mode");
-	if (ImGui::RadioButton("clamp", wrap == false)) {
-		wrap = false;
-	}
-	if (ImGui::RadioButton("wrap", wrap == true)) {
-		wrap = true;
-	}
-
-	ImGui::Separator();
-
-	ImGui::Text("etc");
-	ImGui::Checkbox("expand", &expand);
+	ImGui::Begin("Cubemap");
+	
+	ImGui::SliderFloat("reflection", &sphere->reflection, 0.0f, 1.0f);
 
 	ImGui::End();
 
-	// object
 	auto clear_color = glm::vec4(0.1f, 0.2f, 0.4f, 1.0f);
 	std::fill(canvas_data.begin(), canvas_data.end(), clear_color);
 
 	for (int i = 0; i < height; i++) {
 		for (int j = 0; j < width; j++) {
 			auto pos_world = screen_to_world(glm::vec3((float)j, (float)i, 0.0f));
-			auto ray_dir = glm::vec3(0.0f, 0.0f, 1.0f);
-			canvas_data[i * width + j] = glm::vec4(trace_ray(pos_world, ray_dir), 1.0f);
+			auto cam_pos = glm::vec3(0.0f, 0.0f, -1.0f);
+			auto ray_dir = glm::normalize(pos_world - cam_pos);
+			canvas_data[i * width + j] = glm::vec4(trace_ray(pos_world, ray_dir, 3), 1.0f);
 		}
 	}
 
@@ -78,7 +56,7 @@ void Texturing::update() {
 	context->Unmap(canvas, 0);
 }
 
-void Texturing::render() {
+void Reflection::render() {
 	const float clear_color[] = { 0.1f, 0.2f, 0.4f, 1.0f };
 	context->ClearRenderTargetView(rtv, clear_color);
 

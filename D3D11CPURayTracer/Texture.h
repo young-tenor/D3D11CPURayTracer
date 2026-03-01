@@ -1,9 +1,11 @@
 #pragma once
 #include <glm/glm.hpp>
+#include <string>
 
 class Texture {
 public:
 	Texture(const int width, const int height);
+	Texture(const std::string &filename);
 
 	glm::vec3 clamped_color(int i, int j);
 	glm::vec3 wrapped_color(int i, int j);

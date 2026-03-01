@@ -11,6 +11,7 @@
 #include <imgui_impl_win32.h>
 #include <iostream>
 #include <memory>
+#include <string>
 #include <vector>
 #include <windows.h>
 
