@@ -14,7 +14,7 @@ public:
 
 protected:
 	glm::vec3 screen_to_world(const glm::vec3 &pos);
-	glm::vec3 trace_ray(const glm::vec3 &pos, const glm::vec3 &dir, const int level = 1);
+	glm::vec3 trace_ray(const glm::vec3 &pos, const glm::vec3 &dir, const int level = 0);
 	glm::vec3 blinn_phong(const Hit &hit, const glm::vec3 &light_dir, const glm::vec3 &cam_dir, const float light_strength);
 
 protected:
