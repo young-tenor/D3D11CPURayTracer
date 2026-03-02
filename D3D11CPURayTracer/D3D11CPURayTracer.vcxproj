@@ -154,6 +154,7 @@
     <ClCompile Include="Rect.cpp" />
     <ClCompile Include="Shadow.cpp" />
     <ClCompile Include="Sphere.cpp" />
+    <ClCompile Include="SuperSampling.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Texturing.cpp" />
     <ClCompile Include="Triangle.cpp" />
@@ -172,6 +173,7 @@
     <ClInclude Include="Rect.h" />
     <ClInclude Include="Shadow.h" />
     <ClInclude Include="Sphere.h" />
+    <ClInclude Include="SuperSampling.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Texturing.h" />
     <ClInclude Include="Triangle.h" />

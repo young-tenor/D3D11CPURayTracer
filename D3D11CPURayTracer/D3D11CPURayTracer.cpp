@@ -5,6 +5,7 @@
 #include "Shadow.h"
 #include "Texturing.h"
 #include "Reflection.h"
+#include "SuperSampling.h"
 
 HINSTANCE hInst;
 HWND hWnd;
@@ -30,8 +31,9 @@ int main() {
 	const auto shadow = new Shadow();
 	const auto texturing = new Texturing();
 	const auto reflection = new Reflection();
+	const auto super_sampling = new SuperSampling();
 
-	App *app = reflection;
+	App *app = super_sampling;
 
 	if (!app->init(hWnd)) {
 		std::cout << "init() failed." << std::endl;

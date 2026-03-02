@@ -1,7 +1,8 @@
 #include "pch.h"
-#include "Reflection.h"
+#include "SuperSampling.h"
+#include "Sphere.h"
 
-bool Reflection::init(HWND h_wnd) {
+bool SuperSampling::init(HWND h_wnd) {
 	if (!App::init(h_wnd)) {
 		return false;
 	}
@@ -21,27 +22,27 @@ bool Reflection::init(HWND h_wnd) {
 	}
 
 	// object
-	sphere = new Sphere();
+	Sphere *sphere = new Sphere();
 	sphere->radius = 0.5f;
 	sphere->center = glm::vec3(0.0f, 0.0f, 0.5f);
 	sphere->ambient = glm::vec3(0.1f, 0.02f, 0.02f);
 	sphere->diffuse = glm::vec3(0.8f, 0.1f, 0.1f);
 	sphere->specular = glm::vec3(1.0f, 0.8f, 0.8f);
 	sphere->shininess = 128.0f;
+	sphere->reflection = 0.6f;
 	objects.push_back(sphere);
 
 	return true;
 }
 
-void Reflection::update() {
+void SuperSampling::update() {
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
 
-	ImGui::Begin("Cubemap");
-	
-	ImGui::Text("material");
-	ImGui::SliderFloat("reflection", &sphere->reflection, 0.0f, 1.0f);
+	ImGui::Begin("Super Sampling");
+
+	ImGui::Checkbox("super sampling", &super_sampling);
 
 	ImGui::End();
 
@@ -52,7 +53,11 @@ void Reflection::update() {
 		for (int j = 0; j < width; j++) {
 			const auto pos_world = screen_to_world(glm::vec3((float)j + 0.5f, (float)i + 0.5f, 0.0f));
 			const auto ray_dir = glm::normalize(pos_world - cam_pos);
-			canvas_data[i * width + j] = glm::vec4(trace_ray(pos_world, ray_dir, 3), 1.0f);
+			if (super_sampling) {
+				canvas_data[i * width + j] = glm::vec4(trace_ray_super(pos_world, ray_dir, 3), 1.0f);
+			} else {
+				canvas_data[i * width + j] = glm::vec4(trace_ray(pos_world, ray_dir, 3), 1.0f);
+			}
 		}
 	}
 
@@ -62,7 +67,7 @@ void Reflection::update() {
 	context->Unmap(canvas, 0);
 }
 
-void Reflection::render() {
+void SuperSampling::render() {
 	const float clear_color[] = { 0.1f, 0.2f, 0.4f, 1.0f };
 	context->ClearRenderTargetView(rtv, clear_color);
 
