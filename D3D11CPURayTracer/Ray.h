@@ -2,6 +2,7 @@
 
 class Ray {
 public:
+	Ray();
 	Ray(const glm::vec3 &orig, const glm::vec3 &dir);
 
 public:

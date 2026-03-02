@@ -50,7 +50,7 @@ void Reflection::update() {
 
 	for (int i = 0; i < height; i++) {
 		for (int j = 0; j < width; j++) {
-			const auto pos_world = screen_to_world(glm::vec3((float)j, (float)i, 0.0f));
+			const auto pos_world = screen_to_world(glm::vec3((float)j + 0.5f, (float)i + 0.5f, 0.0f));
 			const auto cam_pos = glm::vec3(0.0f, 0.0f, -1.0f);
 			const auto ray_dir = glm::normalize(pos_world - cam_pos);
 			if (super_sampling) {
