@@ -43,3 +43,6 @@ App *app = super_sampling;
 ## Super Sampling
 <img width="1282" height="752" alt="image" src="https://github.com/user-attachments/assets/45f57f81-0202-44ce-82f1-c1accbf3e462" />
 <img width="1282" height="752" alt="image" src="https://github.com/user-attachments/assets/9b900378-207a-48c8-9051-0140ad45a935" />
+
+## Credits
+* **Cubemap Textures**: Created by [Emil Persson (Humus)](http://www.humus.name), licensed under [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/).
