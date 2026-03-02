@@ -14,13 +14,19 @@ bool Projection::init(HWND h_wnd) {
 	Sphere *front = new Sphere();
 	front->radius = 0.5f;
 	front->center = glm::vec3(-0.25f, 0.0f, 0.5f);
-	front->ambient = glm::vec3(1.0f, 0.0f, 0.0f);
+	front->ambient = glm::vec3(0.1f, 0.02f, 0.02f);
+	front->diffuse = glm::vec3(0.8f, 0.1f, 0.1f);
+	front->specular = glm::vec3(1.0f, 0.8f, 0.8f);
+	front->shininess = 128.0f;
 	objects.push_back(front);
 
 	Sphere *back = new Sphere();
 	back->radius = 0.5f;
 	back->center = glm::vec3(0.25f, 0.0f, 1.0f);
-	back->ambient = glm::vec3(0.0f, 0.0f, 1.0f);
+	back->ambient = glm::vec3(0.02f, 0.05f, 0.1f);
+	back->diffuse = glm::vec3(0.1f, 0.4f, 0.9f);
+	back->specular = glm::vec3(0.8f, 0.9f, 1.0f);
+	back->shininess = 64.0f;
 	objects.push_back(back);
 
 	return true;
@@ -52,7 +58,6 @@ void Projection::update() {
 
 			glm::vec3 ray_dir;
 			if (perspective) {
-				const auto cam_pos = glm::vec3(0.0f, 0.0f, -1.0f);
 				ray_dir = glm::normalize(pos_world - cam_pos);
 			} else {
 				ray_dir = glm::vec3(0.0f, 0.0f, 1.0f);

@@ -45,6 +45,7 @@ protected:
 	bool super_sampling = false;
 
 	Light *light = nullptr;
+	glm::vec3 cam_pos = glm::vec3(0.0f, 0.0f, -1.0f);
 	std::vector<Object *> objects;
 	Cubemap *cubemap = nullptr;
 };

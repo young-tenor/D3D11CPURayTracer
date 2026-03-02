@@ -24,6 +24,10 @@ bool Reflection::init(HWND h_wnd) {
 	sphere = new Sphere();
 	sphere->radius = 0.5f;
 	sphere->center = glm::vec3(0.0f, 0.0f, 0.5f);
+	sphere->ambient = glm::vec3(0.1f, 0.02f, 0.02f);
+	sphere->diffuse = glm::vec3(0.8f, 0.1f, 0.1f);
+	sphere->specular = glm::vec3(1.0f, 0.8f, 0.8f);
+	sphere->shininess = 128.0f;
 	objects.push_back(sphere);
 
 	return true;
@@ -51,7 +55,6 @@ void Reflection::update() {
 	for (int i = 0; i < height; i++) {
 		for (int j = 0; j < width; j++) {
 			const auto pos_world = screen_to_world(glm::vec3((float)j + 0.5f, (float)i + 0.5f, 0.0f));
-			const auto cam_pos = glm::vec3(0.0f, 0.0f, -1.0f);
 			const auto ray_dir = glm::normalize(pos_world - cam_pos);
 			if (super_sampling) {
 				canvas_data[i * width + j] = glm::vec4(trace_ray_super(pos_world, ray_dir, 3), 1.0f);

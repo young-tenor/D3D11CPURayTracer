@@ -225,7 +225,7 @@ glm::vec3 App::trace_ray_super(const glm::vec3 &pos, const glm::vec3 &dir, const
 			const float offset_x = (i - 0.5f) * 0.5f * dx;
 			const float offset_y = (j - 0.5f) * 0.5f * dx;
 			const auto ray_orig = glm::vec3(pos.x + offset_x, pos.y + offset_y, pos.z);
-			const auto ray_dir = glm::normalize(ray_orig - glm::vec3(0.0f, 0.0f, -1.0f));
+			const auto ray_dir = glm::normalize(ray_orig - cam_pos);
 			color += trace_ray(ray_orig, ray_dir, level);
 		}
 	}
