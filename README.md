@@ -14,12 +14,12 @@ const auto super_sampling = new SuperSampling();
 App *app = super_sampling;
 ```
 ### 목차
-* [Blinn-Phong](#blinn-phong-blinnphong)
-* [Perspective Projection](#perspective-projection-projection)
-* [Shadow](#shadow-shadow)
-* [Texturing](#texturing-texturing)
-* [Reflection](#reflection-reflection)
-* [Super Sampling](#super-sampling-supersampling)
+* [Blinn-Phong](#blinn-phong)
+* [Perspective Projection](#perspective-projection)
+* [Shadow](#shadow)
+* [Texturing](#texturing)
+* [Reflection](#reflection)
+* [Super Sampling](#super-sampling)
 
 ## Blinn-Phong
 <img width="1282" height="752" alt="image" src="https://github.com/user-attachments/assets/8d246dc9-2ae5-4b25-bb43-6d47f4511b99" />
