@@ -25,8 +25,8 @@ App *app = super_sampling;
 <img width="1282" height="752" alt="image" src="https://github.com/user-attachments/assets/8d246dc9-2ae5-4b25-bb43-6d47f4511b99" />
 
 ## Perspective Projection
-<img width="1282" height="752" alt="image" src="https://github.com/user-attachments/assets/2e0c02f4-dad9-4af7-a4d2-ed2a7706fefa" />
-<img width="1282" height="752" alt="image" src="https://github.com/user-attachments/assets/9e8b09b9-de42-46ca-bf95-2bba5eef5e85" />
+<img width="1282" height="752" alt="image" src="https://github.com/user-attachments/assets/2d477093-642c-406a-a644-1ef72f6fe335" />
+<img width="1282" height="752" alt="image" src="https://github.com/user-attachments/assets/50510c49-6185-4e38-834d-0a79f7e86107" />
 
 ## Shadow
 <img width="1282" height="752" alt="image" src="https://github.com/user-attachments/assets/423fefed-33ab-439e-acb4-596746b29910" />
