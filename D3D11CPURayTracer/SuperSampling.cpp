@@ -66,26 +66,3 @@ void SuperSampling::update() {
 	memcpy(resource.pData, canvas_data.data(), canvas_data.size() * sizeof(glm::vec4));
 	context->Unmap(canvas, 0);
 }
-
-void SuperSampling::render() {
-	const float clear_color[] = { 0.1f, 0.2f, 0.4f, 1.0f };
-	context->ClearRenderTargetView(rtv, clear_color);
-
-	context->RSSetViewports(1, &viewport);
-	context->OMSetRenderTargets(1, &rtv, nullptr);
-
-	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-	context->VSSetShader(vs, nullptr, 0);
-	context->PSSetShader(ps, nullptr, 0);
-
-	context->PSSetShaderResources(0, 1, &canvas_srv);
-	context->PSSetSamplers(0, 1, &sampler);
-
-	context->Draw(3, 0);
-
-	ImGui::Render();
-	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-
-	swap_chain->Present(1, 0);
-}

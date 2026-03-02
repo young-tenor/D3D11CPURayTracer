@@ -9,7 +9,6 @@ public:
 
 	bool init(HWND h_wnd) override;
 	void update() override;
-	void render() override;
 
 private:
 	Rect *rect = nullptr;

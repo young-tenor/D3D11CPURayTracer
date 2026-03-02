@@ -148,6 +148,29 @@ bool App::init(HWND h_wnd) {
 	return true;
 }
 
+void App::render() {
+	const float clear_color[] = { 0.1f, 0.2f, 0.4f, 1.0f };
+	context->ClearRenderTargetView(rtv, clear_color);
+
+	context->RSSetViewports(1, &viewport);
+	context->OMSetRenderTargets(1, &rtv, nullptr);
+
+	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	context->VSSetShader(vs, nullptr, 0);
+	context->PSSetShader(ps, nullptr, 0);
+
+	context->PSSetShaderResources(0, 1, &canvas_srv);
+	context->PSSetSamplers(0, 1, &sampler);
+
+	context->Draw(3, 0);
+
+	ImGui::Render();
+	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+
+	swap_chain->Present(1, 0);
+}
+
 // [0, w - 1] * [0, h - 1] -> [-aspect, aspect] * [-1, 1]
 glm::vec3 App::screen_to_world(const glm::vec3 &pos) {
 	const float x = pos.x * 2.0f * aspect / (width - 1) - aspect;

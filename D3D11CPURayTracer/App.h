@@ -10,7 +10,7 @@ public:
 
 	virtual bool init(HWND h_wnd);
 	virtual void update() = 0;
-	virtual void render() = 0;
+	void render();
 
 protected:
 	glm::vec3 screen_to_world(const glm::vec3 &pos);
