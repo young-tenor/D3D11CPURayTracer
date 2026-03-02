@@ -10,7 +10,7 @@ bool Projection::init(HWND h_wnd) {
 	// objects
 	Sphere *front = new Sphere();
 	front->radius = 0.5f;
-	front->center = glm::vec3(-0.25f, 0.0f, 0.5f);
+	front->center = glm::vec3(-0.33f, 0.0f, 0.5f);
 	front->ambient = glm::vec3(0.1f, 0.02f, 0.02f);
 	front->diffuse = glm::vec3(0.8f, 0.1f, 0.1f);
 	front->specular = glm::vec3(1.0f, 0.8f, 0.8f);
@@ -19,7 +19,7 @@ bool Projection::init(HWND h_wnd) {
 
 	Sphere *back = new Sphere();
 	back->radius = 0.5f;
-	back->center = glm::vec3(0.25f, 0.0f, 1.0f);
+	back->center = glm::vec3(0.33f, 0.0f, 1.0f);
 	back->ambient = glm::vec3(0.02f, 0.05f, 0.1f);
 	back->diffuse = glm::vec3(0.1f, 0.4f, 0.9f);
 	back->specular = glm::vec3(0.8f, 0.9f, 1.0f);

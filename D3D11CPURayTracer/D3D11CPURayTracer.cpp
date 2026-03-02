@@ -33,7 +33,7 @@ int main() {
 	const auto reflection = new Reflection();
 	const auto super_sampling = new SuperSampling();
 
-	App *app = super_sampling;
+	App *app = projection;
 
 	if (!app->init(hWnd)) {
 		std::cout << "init() failed." << std::endl;
