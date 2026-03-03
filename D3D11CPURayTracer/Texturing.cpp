@@ -50,8 +50,9 @@ void Texturing::update() {
 	ImGui::Checkbox("expand", &expand);
 
 	ImGui::End();
+}
 
-	// object
+void Texturing::cpu_render() {
 	const auto clear_color = glm::vec4(0.1f, 0.2f, 0.4f, 1.0f);
 	std::fill(canvas_data.begin(), canvas_data.end(), clear_color);
 

@@ -44,7 +44,9 @@ void Reflection::update() {
 	ImGui::SliderFloat("reflection", &sphere->reflection, 0.0f, 1.0f);
 
 	ImGui::End();
+}
 
+void Reflection::cpu_render() {
 	const auto clear_color = glm::vec4(0.1f, 0.2f, 0.4f, 1.0f);
 	std::fill(canvas_data.begin(), canvas_data.end(), clear_color);
 

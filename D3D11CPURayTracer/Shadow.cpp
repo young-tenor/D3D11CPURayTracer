@@ -40,8 +40,9 @@ void Shadow::update() {
 	ImGui::Checkbox("draw shadow", &draw_shadow);
 
 	ImGui::End();
+}
 
-	// objects
+void Shadow::cpu_render() {
 	const auto clear_color = glm::vec4(0.1f, 0.2f, 0.4f, 1.0f);
 	std::fill(canvas_data.begin(), canvas_data.end(), clear_color);
 

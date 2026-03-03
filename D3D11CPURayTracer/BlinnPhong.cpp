@@ -47,8 +47,9 @@ void BlinnPhong::update() {
 	ImGui::SliderFloat("strength", &light->strength, 0.0f, 5.0f);
 
 	ImGui::End();
+}
 
-	// object
+void BlinnPhong::cpu_render() {
 	const auto clear_color = glm::vec4(0.1f, 0.2f, 0.4f, 1.0f);
 	fill(canvas_data.begin(), canvas_data.end(), clear_color);
 

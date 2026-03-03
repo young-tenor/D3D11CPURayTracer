@@ -149,6 +149,8 @@ bool App::init(HWND h_wnd) {
 }
 
 void App::render() {
+	cpu_render();
+
 	const float clear_color[] = { 0.1f, 0.2f, 0.4f, 1.0f };
 	context->ClearRenderTargetView(rtv, clear_color);
 
@@ -208,8 +210,8 @@ glm::vec3 App::trace_ray(const glm::vec3 &pos, const glm::vec3 &dir, const int l
 	}
 
 	const auto light_vec = glm::normalize(light->pos - closest_hit.pos);
-	const auto cam_dir = glm::normalize(-ray.dir);
-	auto color = blinn_phong(closest_hit, light_vec, cam_dir, light->strength);
+	const auto cam_vec = glm::normalize(-ray.dir);
+	auto color = blinn_phong(closest_hit, light_vec, cam_vec, light->strength);
 
 	if (closest_hit.obj->reflection > 0.0f) {
 		const glm::vec3 reflect_dir = glm::reflect(ray.dir, closest_hit.normal);
@@ -258,8 +260,8 @@ glm::vec3 App::trace_ray_super(const glm::vec3 &pos, const glm::vec3 &dir, const
 }
 
 // https://en.wikipedia.org/wiki/Blinn%E2%80%93Phong_reflection_model
-glm::vec3 App::blinn_phong(const Hit &hit, const glm::vec3 &light_dir, const glm::vec3 &cam_dir, const float light_strength) {
-	const auto halfway = glm::normalize(light_dir + cam_dir);
+glm::vec3 App::blinn_phong(const Hit &hit, const glm::vec3 &light_dir, const glm::vec3 &cam_vec, const float light_strength) {
+	const auto halfway = glm::normalize(light_dir + cam_vec);
 
 	auto ambient = hit.obj->ambient;
 	if (hit.obj->texture) {
