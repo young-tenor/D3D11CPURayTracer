@@ -7,7 +7,9 @@ bool BlinnPhong::Init(HWND hWnd) {
 	}
 
 	// light
-	light = new Light(1.0f, glm::vec3(0.0f, 1.0f, -1.0f));
+	light = new Light();
+	light->strength = 1.0f;
+	light->pos = glm::vec3(0.0f, 1.0f, -1.0f);
 
 	// object
 	sphere = new Sphere();
