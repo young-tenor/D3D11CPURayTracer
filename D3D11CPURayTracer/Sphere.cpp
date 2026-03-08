@@ -2,7 +2,7 @@
 #include "Sphere.h"
 
 // https://en.wikipedia.org/wiki/Line%E2%80%93sphere_intersection
-Hit Sphere::intersect(const Ray &ray) {
+Hit Sphere::Intersect(const Ray &ray) {
 	Hit hit;
 
 	const float a = glm::dot(ray.dir, ray.dir);

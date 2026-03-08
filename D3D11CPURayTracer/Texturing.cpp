@@ -1,15 +1,15 @@
 #include "pch.h"
 #include "Texturing.h"
 
-bool Texturing::init(HWND h_wnd) {
-	if (!App::init(h_wnd)) {
+bool Texturing::Init(HWND hWnd) {
+	if (!App::Init(hWnd)) {
 		return false;
 	}
 
 	// object
 	rect = new Rect();
-	rect->set_vertices(glm::vec3(-0.5f, 0.5f, 1.0f), glm::vec3(0.5f, 0.5f, 1.0f), glm::vec3(0.5f, -0.5f, 1.0f), glm::vec3(-0.5f, -0.5f, 1.0f));
-	rect->set_uvs(glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 0.0f), glm::vec2(1.0f, 1.0f), glm::vec2(0.0f, 1.0f));
+	rect->SetVertices(glm::vec3(-0.5f, 0.5f, 1.0f), glm::vec3(0.5f, 0.5f, 1.0f), glm::vec3(0.5f, -0.5f, 1.0f), glm::vec3(-0.5f, -0.5f, 1.0f));
+	rect->SetUVs(glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 0.0f), glm::vec2(1.0f, 1.0f), glm::vec2(0.0f, 1.0f));
 	rect->texture = new Texture(4, 4);
 	rect->ambient = glm::vec3(1.0f);
 	rect->diffuse = glm::vec3(0.0f);
@@ -19,7 +19,7 @@ bool Texturing::init(HWND h_wnd) {
 	return true;
 }
 
-void Texturing::update() {
+void Texturing::Update() {
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
@@ -27,11 +27,11 @@ void Texturing::update() {
 	ImGui::Begin("Texturing");
 
 	ImGui::Text("sampling mode");
-	if (ImGui::RadioButton("point sampling", linear_sampling == false)) {
-		linear_sampling = false;
+	if (ImGui::RadioButton("point sampling", linearSampling == false)) {
+		linearSampling = false;
 	}
-	if (ImGui::RadioButton("linear sampling", linear_sampling == true)) {
-		linear_sampling = true;
+	if (ImGui::RadioButton("linear sampling", linearSampling == true)) {
+		linearSampling = true;
 	}
 
 	ImGui::Separator();
@@ -52,20 +52,20 @@ void Texturing::update() {
 	ImGui::End();
 }
 
-void Texturing::cpu_render() {
-	const auto clear_color = glm::vec4(0.1f, 0.2f, 0.4f, 1.0f);
-	std::fill(canvas_data.begin(), canvas_data.end(), clear_color);
+void Texturing::CPURender() {
+	const auto clearColor = glm::vec4(0.1f, 0.2f, 0.4f, 1.0f);
+	std::fill(canvasData.begin(), canvasData.end(), clearColor);
 
 	for (int i = 0; i < height; i++) {
 		for (int j = 0; j < width; j++) {
-			const auto pos_world = screen_to_world(glm::vec3((float)j + 0.5f, (float)i + 0.5f, 0.0f));
-			const auto ray_dir = glm::vec3(0.0f, 0.0f, 1.0f);
-			canvas_data[i * width + j] = glm::vec4(trace_ray(pos_world, ray_dir), 1.0f);
+			const auto posWorld = ScreenToWorld(glm::vec3((float)j + 0.5f, (float)i + 0.5f, 0.0f));
+			const auto rayDir = glm::vec3(0.0f, 0.0f, 1.0f);
+			canvasData[i * width + j] = glm::vec4(TraceRay(posWorld, rayDir), 1.0f);
 		}
 	}
 
 	D3D11_MAPPED_SUBRESOURCE resource;
 	context->Map(canvas, 0, D3D11_MAP_WRITE_DISCARD, 0, &resource);
-	memcpy(resource.pData, canvas_data.data(), canvas_data.size() * sizeof(glm::vec4));
+	memcpy(resource.pData, canvasData.data(), canvasData.size() * sizeof(glm::vec4));
 	context->Unmap(canvas, 0);
 }

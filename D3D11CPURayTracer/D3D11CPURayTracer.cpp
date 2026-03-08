@@ -26,16 +26,16 @@ int main() {
 		return -1;
 	}
 
-	const auto blinn_phong = new BlinnPhong();
+	const auto blinnPhong = new BlinnPhong();
 	const auto projection = new Projection();
 	const auto shadow = new Shadow();
 	const auto texturing = new Texturing();
 	const auto reflection = new Reflection();
-	const auto super_sampling = new SuperSampling();
+	const auto superSampling = new SuperSampling();
 
-	App *app = super_sampling;
+	App *app = superSampling;
 
-	if (!app->init(hWnd)) {
+	if (!app->Init(hWnd)) {
 		std::cout << "init() failed." << std::endl;
 		return -1;
 	}
@@ -46,8 +46,8 @@ int main() {
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		} else {
-			app->update();
-			app->render();
+			app->Update();
+			app->Render();
 		}
 	}
 

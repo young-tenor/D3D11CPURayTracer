@@ -7,11 +7,11 @@ class Texturing : public App {
 public:
 	~Texturing() override = default;
 
-	bool init(HWND h_wnd) override;
-	void update() override;
+	bool Init(HWND hWnd) override;
+	void Update() override;
 
 protected:
-	void cpu_render() override;
+	void CPURender() override;
 
 private:
 	Rect *rect = nullptr;

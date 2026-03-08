@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "BlinnPhong.h"
 
-bool BlinnPhong::init(HWND h_wnd) {
-	if (!App::init(h_wnd)) {
+bool BlinnPhong::Init(HWND hWnd) {
+	if (!App::Init(hWnd)) {
 		return false;
 	}
 
@@ -18,7 +18,7 @@ bool BlinnPhong::init(HWND h_wnd) {
 	return true;
 }
 
-void BlinnPhong::update() {
+void BlinnPhong::Update() {
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
@@ -49,20 +49,20 @@ void BlinnPhong::update() {
 	ImGui::End();
 }
 
-void BlinnPhong::cpu_render() {
-	const auto clear_color = glm::vec4(0.1f, 0.2f, 0.4f, 1.0f);
-	fill(canvas_data.begin(), canvas_data.end(), clear_color);
+void BlinnPhong::CPURender() {
+	const auto clearColor = glm::vec4(0.1f, 0.2f, 0.4f, 1.0f);
+	fill(canvasData.begin(), canvasData.end(), clearColor);
 
 	for (int i = 0; i < height; i++) {
 		for (int j = 0; j < width; j++) {
-			const auto pos_world = screen_to_world(glm::vec3((float)j + 0.5f, (float)i + 0.5f, 0.0f));
-			const auto ray_dir = glm::vec3(0.0f, 0.0f, 1.0f);
-			canvas_data[i * width + j] = glm::vec4(trace_ray(pos_world, ray_dir), 1.0f);
+			const auto posWorld = ScreenToWorld(glm::vec3((float)j + 0.5f, (float)i + 0.5f, 0.0f));
+			const auto rayDir = glm::vec3(0.0f, 0.0f, 1.0f);
+			canvasData[i * width + j] = glm::vec4(TraceRay(posWorld, rayDir), 1.0f);
 		}
 	}
 
 	D3D11_MAPPED_SUBRESOURCE resource;
 	context->Map(canvas, 0, D3D11_MAP_WRITE_DISCARD, 0, &resource);
-	memcpy(resource.pData, canvas_data.data(), canvas_data.size() * sizeof(glm::vec4));
+	memcpy(resource.pData, canvasData.data(), canvasData.size() * sizeof(glm::vec4));
 	context->Unmap(canvas, 0);
 }

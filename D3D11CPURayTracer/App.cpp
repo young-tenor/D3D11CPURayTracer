@@ -1,40 +1,40 @@
 #include "pch.h"
 #include "App.h"
 
-bool App::init(HWND h_wnd) {
-	this->h_wnd = h_wnd;
+bool App::Init(HWND hWnd) {
+	this->hWnd = hWnd;
 
 	RECT rc;
-	GetClientRect(h_wnd, &rc);
+	GetClientRect(hWnd, &rc);
 	width = rc.right - rc.left;
 	height = rc.bottom - rc.top;
 	aspect = width / height;
 
 	// device & swap chain
-	DXGI_SWAP_CHAIN_DESC swap_chain_desc = { 0 };
-	swap_chain_desc.BufferCount = 1;
-	swap_chain_desc.BufferDesc.Width = width;
-	swap_chain_desc.BufferDesc.Height = height;
-	swap_chain_desc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-	swap_chain_desc.BufferDesc.RefreshRate.Numerator = 60;
-	swap_chain_desc.BufferDesc.RefreshRate.Denominator = 1;
-	swap_chain_desc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	swap_chain_desc.OutputWindow = h_wnd;
-	swap_chain_desc.SampleDesc.Count = 1;
-	swap_chain_desc.SampleDesc.Quality = 0;
-	swap_chain_desc.Windowed = TRUE;
+	DXGI_SWAP_CHAIN_DESC swapChainDesc = { 0 };
+	swapChainDesc.BufferCount = 1;
+	swapChainDesc.BufferDesc.Width = width;
+	swapChainDesc.BufferDesc.Height = height;
+	swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	swapChainDesc.BufferDesc.RefreshRate.Numerator = 60;
+	swapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
+	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+	swapChainDesc.OutputWindow = hWnd;
+	swapChainDesc.SampleDesc.Count = 1;
+	swapChainDesc.SampleDesc.Quality = 0;
+	swapChainDesc.Windowed = TRUE;
 
-	D3D_FEATURE_LEVEL feature_levels[] = { D3D_FEATURE_LEVEL_11_0 };
+	D3D_FEATURE_LEVEL featureLevels[] = { D3D_FEATURE_LEVEL_11_0 };
 	HRESULT hr = D3D11CreateDeviceAndSwapChain(
 		nullptr,
 		D3D_DRIVER_TYPE_HARDWARE,
 		nullptr,
 		0,
-		feature_levels,
+		featureLevels,
 		1,
 		D3D11_SDK_VERSION,
-		&swap_chain_desc,
-		&swap_chain,
+		&swapChainDesc,
+		&swapChain,
 		&device,
 		nullptr,
 		&context);
@@ -44,19 +44,19 @@ bool App::init(HWND h_wnd) {
 	}
 
 	// render target view
-	ID3D11Texture2D *back_buffer = nullptr;
-	hr = swap_chain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void **)&back_buffer);
+	ID3D11Texture2D *backBuffer = nullptr;
+	hr = swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void **)&backBuffer);
 	if (FAILED(hr)) {
 		std::cout << "GetBuffer() failed." << std::endl;
 		return false;
 	}
 
-	hr = device->CreateRenderTargetView(back_buffer, nullptr, &rtv);
+	hr = device->CreateRenderTargetView(backBuffer, nullptr, &rtv);
 	if (FAILED(hr)) {
 		std::cout << "CreateRenderTargetView() failed." << std::endl;
 		return false;
 	}
-	back_buffer->Release();
+	backBuffer->Release();
 
 	// viewport
 	viewport.Width = width;
@@ -66,66 +66,66 @@ bool App::init(HWND h_wnd) {
 	viewport.TopLeftX = 0;
 	viewport.TopLeftY = 0;
 
-	ID3DBlob *vs_blob = nullptr;
-	ID3DBlob *ps_blob = nullptr;
+	ID3DBlob *vsBlob = nullptr;
+	ID3DBlob *psBlob = nullptr;
 
 	// vertex shader
-	hr = D3DCompileFromFile(L"Shaders.hlsl", nullptr, nullptr, "vs_main", "vs_5_0", 0, 0, &vs_blob, nullptr);
+	hr = D3DCompileFromFile(L"Shaders.hlsl", nullptr, nullptr, "vs_main", "vs_5_0", 0, 0, &vsBlob, nullptr);
 	if (FAILED(hr)) {
 		std::cout << "D3DCompileFromFile() failed: vertex shader" << std::endl;
 		return false;
 	}
 
-	hr = device->CreateVertexShader(vs_blob->GetBufferPointer(), vs_blob->GetBufferSize(), nullptr, &vs);
-	vs_blob->Release();
+	hr = device->CreateVertexShader(vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), nullptr, &vs);
+	vsBlob->Release();
 
 	// pixel shader
-	hr = D3DCompileFromFile(L"Shaders.hlsl", nullptr, nullptr, "ps_main", "ps_5_0", 0, 0, &ps_blob, nullptr);
+	hr = D3DCompileFromFile(L"Shaders.hlsl", nullptr, nullptr, "ps_main", "ps_5_0", 0, 0, &psBlob, nullptr);
 	if (FAILED(hr)) {
 		std::cout << "D3DCompileFromFile() failed: pixel shader" << std::endl;
 		return false;
 	}
 
-	hr = device->CreatePixelShader(ps_blob->GetBufferPointer(), ps_blob->GetBufferSize(), nullptr, &ps);
-	ps_blob->Release();
+	hr = device->CreatePixelShader(psBlob->GetBufferPointer(), psBlob->GetBufferSize(), nullptr, &ps);
+	psBlob->Release();
 
 	// texture
-	D3D11_TEXTURE2D_DESC texture_desc = { 0 };
-	texture_desc.Width = width;
-	texture_desc.Height = height;
-	texture_desc.MipLevels = 1;
-	texture_desc.ArraySize = 1;
-	texture_desc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
-	texture_desc.SampleDesc.Count = 1;
-	texture_desc.Usage = D3D11_USAGE_DYNAMIC;
-	texture_desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
-	texture_desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	D3D11_TEXTURE2D_DESC textureDesc = { 0 };
+	textureDesc.Width = width;
+	textureDesc.Height = height;
+	textureDesc.MipLevels = 1;
+	textureDesc.ArraySize = 1;
+	textureDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+	textureDesc.SampleDesc.Count = 1;
+	textureDesc.Usage = D3D11_USAGE_DYNAMIC;
+	textureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+	textureDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 
-	hr = device->CreateTexture2D(&texture_desc, nullptr, &canvas);
+	hr = device->CreateTexture2D(&textureDesc, nullptr, &canvas);
 	if (FAILED(hr)) {
 		std::cout << "CreateTexture2D() failed." << std::endl;
 		return false;
 	}
 
-	hr = device->CreateShaderResourceView(canvas, nullptr, &canvas_srv);
+	hr = device->CreateShaderResourceView(canvas, nullptr, &canvasSrv);
 	if (FAILED(hr)) {
 		std::cout << "CreateShaderResourceView() failed." << std::endl;
 		return false;
 	}
 
-	canvas_data.resize(width * height);
+	canvasData.resize(width * height);
 
 	// sampler
-	D3D11_SAMPLER_DESC sampler_desc = { 0 };
-	sampler_desc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
-	sampler_desc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
-	sampler_desc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
-	sampler_desc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
-	sampler_desc.ComparisonFunc = D3D11_COMPARISON_NEVER;
-	sampler_desc.MinLOD = 0;
-	sampler_desc.MaxLOD = D3D11_FLOAT32_MAX;
+	D3D11_SAMPLER_DESC samplerDesc = { 0 };
+	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
+	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+	samplerDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+	samplerDesc.MinLOD = 0;
+	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
 
-	hr = device->CreateSamplerState(&sampler_desc, &sampler);
+	hr = device->CreateSamplerState(&samplerDesc, &sampler);
 	if (FAILED(hr)) {
 		std::cout << "CreateSamplerState() failed." << std::endl;
 		return false;
@@ -142,17 +142,17 @@ bool App::init(HWND h_wnd) {
 
 	ImGui::StyleColorsLight();
 
-	ImGui_ImplWin32_Init(h_wnd);
+	ImGui_ImplWin32_Init(hWnd);
 	ImGui_ImplDX11_Init(device, context);
 
 	return true;
 }
 
-void App::render() {
-	cpu_render();
+void App::Render() {
+	CPURender();
 
-	const float clear_color[] = { 0.1f, 0.2f, 0.4f, 1.0f };
-	context->ClearRenderTargetView(rtv, clear_color);
+	const float clearColor[] = { 0.1f, 0.2f, 0.4f, 1.0f };
+	context->ClearRenderTargetView(rtv, clearColor);
 
 	context->RSSetViewports(1, &viewport);
 	context->OMSetRenderTargets(1, &rtv, nullptr);
@@ -162,7 +162,7 @@ void App::render() {
 	context->VSSetShader(vs, nullptr, 0);
 	context->PSSetShader(ps, nullptr, 0);
 
-	context->PSSetShaderResources(0, 1, &canvas_srv);
+	context->PSSetShaderResources(0, 1, &canvasSrv);
 	context->PSSetSamplers(0, 1, &sampler);
 
 	context->Draw(3, 0);
@@ -170,70 +170,70 @@ void App::render() {
 	ImGui::Render();
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
-	swap_chain->Present(1, 0);
+	swapChain->Present(1, 0);
 }
 
 // [0, w - 1] * [0, h - 1] -> [-aspect, aspect] * [-1, 1]
-glm::vec3 App::screen_to_world(const glm::vec3 &pos) {
+glm::vec3 App::ScreenToWorld(const glm::vec3 &pos) {
 	const float x = pos.x * 2.0f * aspect / (width - 1) - aspect;
 	const float y = pos.y * 2.0f / (height - 1) - 1.0f;
 	return glm::vec3(x, -y, 0.0f);
 }
 
-glm::vec3 App::trace_ray(const glm::vec3 &pos, const glm::vec3 &dir, const int level) {
+glm::vec3 App::TraceRay(const glm::vec3 &pos, const glm::vec3 &dir, const int level) {
 	if (level < 0) {
 		return glm::vec3(0.0f);
 	}
 
 	const Ray ray(pos, dir);
-	Hit closest_hit;
-	float min_d = 100.0f;
+	Hit closestHit;
+	float minDist = 100.0f;
 
 	for (const auto &object : objects) {
-		const Hit hit = object->intersect(ray);
-		if (hit.d < 0.0f || hit.d > min_d) {
+		const Hit hit = object->Intersect(ray);
+		if (hit.d < 0.0f || hit.d > minDist) {
 			continue;
 		}
-		closest_hit = hit;
-		min_d = hit.d;
+		closestHit = hit;
+		minDist = hit.d;
 	}
 
-	if (!closest_hit.obj) {
+	if (!closestHit.obj) {
 		if (cubemap) {
-			return cubemap->sample(dir);
+			return cubemap->Sample(dir);
 		}
 		return glm::vec3(0.0f);
 	}
 
 	if (expand) {
-		closest_hit.uv *= 4.0f;
+		closestHit.uv *= 4.0f;
 	}
 
-	const auto light_vec = glm::normalize(light->pos - closest_hit.pos);
-	const auto cam_vec = glm::normalize(-ray.dir);
-	auto color = blinn_phong(closest_hit, light_vec, cam_vec, light->strength);
+	const auto lightVec = glm::normalize(light->pos - closestHit.pos);
+	const auto camVec = glm::normalize(-ray.dir);
+	auto color = BlinnPhong(closestHit, lightVec, camVec, light->strength);
 
-	if (closest_hit.obj->reflection > 0.0f) {
-		const glm::vec3 reflect_dir = glm::reflect(ray.dir, closest_hit.normal);
-		const glm::vec3 reflected_color = trace_ray(closest_hit.pos + reflect_dir * 1e-3f, reflect_dir, level - 1);
-		color = glm::mix(color, reflected_color, closest_hit.obj->reflection);
+	if (closestHit.obj->reflection > 0.0f) {
+		const glm::vec3 reflectDir = glm::reflect(ray.dir, closestHit.normal);
+		const glm::vec3 reflectedColor = TraceRay(closestHit.pos + reflectDir * 1e-3f, reflectDir, level - 1);
+		color = glm::mix(color, reflectedColor, closestHit.obj->reflection);
 	}
 
-	if (draw_shadow) {
-		const Ray shadow_ray(closest_hit.pos + closest_hit.normal * 1e-3f, light_vec);
-		bool is_shadowed = false;
+	if (drawShadow) {
+		const Ray shadowRay(closestHit.pos + closestHit.normal * 1e-3f, lightVec);
+		bool isShadowed = false;
 		for (const auto &object : objects) {
-			const Hit hit = object->intersect(shadow_ray);
+			const Hit hit = object->Intersect(shadowRay);
 			if (hit.d < 0.0f) {
 				continue;
 			}
-			is_shadowed = true;
+			isShadowed = true;
 			break;
 		}
-		if (is_shadowed) {
-			color = closest_hit.obj->ambient;
-			if (closest_hit.obj->texture) {
-				color *= closest_hit.obj->texture->sample_point(closest_hit.uv, false);
+		if (isShadowed) {
+			color = closestHit.obj->ambient;
+			if (closestHit.obj->texture) {
+				color *= closestHit.obj->texture->SamplePoint(closestHit.uv, false);
 			}
 		}
 	}
@@ -241,17 +241,17 @@ glm::vec3 App::trace_ray(const glm::vec3 &pos, const glm::vec3 &dir, const int l
 	return color;
 }
 
-glm::vec3 App::trace_ray_super(const glm::vec3 &pos, const glm::vec3 &dir, const int level) {
+glm::vec3 App::TraceRaySuper(const glm::vec3 &pos, const glm::vec3 &dir, const int level) {
 	const float dx = 2.0f / height;
 	auto color = glm::vec3(0.0f);
 
 	for (int i = 0; i < 2; i++) {
 		for (int j = 0; j < 2; j++) {
-			const float offset_x = (i - 0.5f) * 0.5f * dx;
-			const float offset_y = (j - 0.5f) * 0.5f * dx;
-			const auto ray_orig = glm::vec3(pos.x + offset_x, pos.y + offset_y, pos.z);
-			const auto ray_dir = glm::normalize(ray_orig - cam_pos);
-			color += trace_ray(ray_orig, ray_dir, level);
+			const float offsetX = (i - 0.5f) * 0.5f * dx;
+			const float offsetY = (j - 0.5f) * 0.5f * dx;
+			const auto rayOrig = glm::vec3(pos.x + offsetX, pos.y + offsetY, pos.z);
+			const auto rayDir = glm::normalize(rayOrig - camPos);
+			color += TraceRay(rayOrig, rayDir, level);
 		}
 	}
 	color /= 4.0f;
@@ -260,20 +260,20 @@ glm::vec3 App::trace_ray_super(const glm::vec3 &pos, const glm::vec3 &dir, const
 }
 
 // https://en.wikipedia.org/wiki/Blinn%E2%80%93Phong_reflection_model
-glm::vec3 App::blinn_phong(const Hit &hit, const glm::vec3 &light_dir, const glm::vec3 &cam_vec, const float light_strength) {
-	const auto halfway = glm::normalize(light_dir + cam_vec);
+glm::vec3 App::BlinnPhong(const Hit &hit, const glm::vec3 &lightDir, const glm::vec3 &camVec, const float lightStrength) {
+	const auto halfway = glm::normalize(lightDir + camVec);
 
 	auto ambient = hit.obj->ambient;
 	if (hit.obj->texture) {
-		if (linear_sampling) {
-			ambient *= hit.obj->texture->sample_linear(hit.uv, wrap);
+		if (linearSampling) {
+			ambient *= hit.obj->texture->SampleLinear(hit.uv, wrap);
 		} else {
-			ambient *= hit.obj->texture->sample_point(hit.uv, wrap);
+			ambient *= hit.obj->texture->SamplePoint(hit.uv, wrap);
 		}
 	}
-	const auto diffuse = glm::max(glm::dot(hit.normal, light_dir), 0.0f) * hit.obj->diffuse;
+	const auto diffuse = glm::max(glm::dot(hit.normal, lightDir), 0.0f) * hit.obj->diffuse;
 	const auto specular = glm::pow(glm::max(glm::dot(hit.normal, halfway), 0.0f), hit.obj->shininess) * hit.obj->specular;
-	const auto color = ambient + (diffuse + specular) * light_strength;
+	const auto color = ambient + (diffuse + specular) * lightStrength;
 
 	return color;
 }

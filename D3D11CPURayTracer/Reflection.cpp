@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "Reflection.h"
 
-bool Reflection::init(HWND h_wnd) {
-	if (!App::init(h_wnd)) {
+bool Reflection::Init(HWND hWnd) {
+	if (!App::Init(hWnd)) {
 		return false;
 	}
 
@@ -15,7 +15,7 @@ bool Reflection::init(HWND h_wnd) {
 	const std::string pz = "./pz.jpg";
 
 	cubemap = new Cubemap();
-	if (!cubemap->init(nx, px, ny, py, nz, pz)) {
+	if (!cubemap->Init(nx, px, ny, py, nz, pz)) {
 		std::cout << "cubemap->init() failed" << std::endl;
 		return false;
 	}
@@ -33,7 +33,7 @@ bool Reflection::init(HWND h_wnd) {
 	return true;
 }
 
-void Reflection::update() {
+void Reflection::Update() {
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
@@ -46,20 +46,20 @@ void Reflection::update() {
 	ImGui::End();
 }
 
-void Reflection::cpu_render() {
+void Reflection::CPURender() {
 	const auto clear_color = glm::vec4(0.1f, 0.2f, 0.4f, 1.0f);
-	std::fill(canvas_data.begin(), canvas_data.end(), clear_color);
+	std::fill(canvasData.begin(), canvasData.end(), clear_color);
 
 	for (int i = 0; i < height; i++) {
 		for (int j = 0; j < width; j++) {
-			const auto pos_world = screen_to_world(glm::vec3((float)j + 0.5f, (float)i + 0.5f, 0.0f));
-			const auto ray_dir = glm::normalize(pos_world - cam_pos);
-			canvas_data[i * width + j] = glm::vec4(trace_ray(pos_world, ray_dir, 3), 1.0f);
+			const auto posWorld = ScreenToWorld(glm::vec3((float)j + 0.5f, (float)i + 0.5f, 0.0f));
+			const auto rayDir = glm::normalize(posWorld - camPos);
+			canvasData[i * width + j] = glm::vec4(TraceRay(posWorld, rayDir, 3), 1.0f);
 		}
 	}
 
 	D3D11_MAPPED_SUBRESOURCE resource;
 	context->Map(canvas, 0, D3D11_MAP_WRITE_DISCARD, 0, &resource);
-	memcpy(resource.pData, canvas_data.data(), canvas_data.size() * sizeof(glm::vec4));
+	memcpy(resource.pData, canvasData.data(), canvasData.size() * sizeof(glm::vec4));
 	context->Unmap(canvas, 0);
 }

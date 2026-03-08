@@ -5,7 +5,7 @@ class Sphere : public Object {
 public:
 	~Sphere() override = default;
 
-	Hit intersect(const Ray &ray) override;
+	Hit Intersect(const Ray &ray) override;
 
 public:
 	float radius = 0.0f;

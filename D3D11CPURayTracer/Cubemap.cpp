@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Cubemap.h"
 
-bool Cubemap::init(const std::string &nx, const std::string &px, const std::string &ny, const std::string &py, const std::string &nz, const std::string &pz) {
+bool Cubemap::Init(const std::string &nx, const std::string &px, const std::string &ny, const std::string &py, const std::string &nz, const std::string &pz) {
 	this->nx = new Texture(nx);
 	this->px = new Texture(px);
 	this->ny = new Texture(ny);
@@ -15,23 +15,23 @@ bool Cubemap::init(const std::string &nx, const std::string &px, const std::stri
 }
 
 // https://en.wikipedia.org/wiki/Cube_mapping
-glm::vec3 Cubemap::sample(const glm::vec3 &dir) {
+glm::vec3 Cubemap::Sample(const glm::vec3 &dir) {
 	glm::vec3 d = glm::normalize(dir);
 
-	const float abs_x = glm::abs(d.x);
-	const float abs_y = glm::abs(d.y);
-	const float abs_z = glm::abs(d.z);
+	const float absX = glm::abs(d.x);
+	const float absY = glm::abs(d.y);
+	const float absZ = glm::abs(d.z);
 
-	const bool is_x_positive = d.x > 0.0f;
-	const bool is_y_positive = d.y > 0.0f;
-	const bool is_z_positive = d.z > 0.0f;
+	const bool xPositive = d.x > 0.0f;
+	const bool yPositive = d.y > 0.0f;
+	const bool zPositive = d.z > 0.0f;
 
-	float max_axis, uc, vc;
+	float maxAxis, uc, vc;
 	Texture *target = nullptr;
 
-	if (abs_x >= abs_y && abs_x >= abs_z) {
-		max_axis = abs_x;
-		if (is_x_positive) {
+	if (absX >= absY && absX >= absZ) {
+		maxAxis = absX;
+		if (xPositive) {
 			uc = -d.z; 
 			vc = d.y; 
 			target = px;
@@ -40,9 +40,9 @@ glm::vec3 Cubemap::sample(const glm::vec3 &dir) {
 			vc = d.y; 
 			target = nx;
 		}
-	} else if (abs_y >= abs_x && abs_y >= abs_z) {
-		max_axis = abs_y;
-		if (is_y_positive) {
+	} else if (absY >= absX && absY >= absZ) {
+		maxAxis = absY;
+		if (yPositive) {
 			uc = d.x; 
 			vc = -d.z; 
 			target = py;
@@ -52,8 +52,8 @@ glm::vec3 Cubemap::sample(const glm::vec3 &dir) {
 			target = ny;
 		}
 	} else {
-		max_axis = abs_z;
-		if (is_z_positive) {
+		maxAxis = absZ;
+		if (zPositive) {
 			uc = d.x; 
 			vc = d.y; 
 			target = pz;
@@ -65,11 +65,11 @@ glm::vec3 Cubemap::sample(const glm::vec3 &dir) {
 	}
 
 	// [-max_axis, max_axis] -> [0, 1]
-	const float u = 0.5f * (uc / max_axis + 1.0f);
-	const float v = 1.0f - 0.5f * (vc / max_axis + 1.0f);
+	const float u = 0.5f * (uc / maxAxis + 1.0f);
+	const float v = 1.0f - 0.5f * (vc / maxAxis + 1.0f);
 
 	if (!target) {
 		return glm::vec3(0.0f);
 	}
-	return target->sample_linear(glm::vec2(u, v), false);
+	return target->SampleLinear(glm::vec2(u, v), false);
 }

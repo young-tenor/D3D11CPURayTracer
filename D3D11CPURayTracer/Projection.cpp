@@ -2,8 +2,8 @@
 #include "Projection.h"
 #include "Sphere.h"
 
-bool Projection::init(HWND h_wnd) {
-	if (!App::init(h_wnd)) {
+bool Projection::Init(HWND hWnd) {
+	if (!App::Init(hWnd)) {
 		return false;
 	}
 
@@ -29,7 +29,7 @@ bool Projection::init(HWND h_wnd) {
 	return true;
 }
 
-void Projection::update() {
+void Projection::Update() {
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
@@ -46,27 +46,27 @@ void Projection::update() {
 	ImGui::End();
 }
 
-void Projection::cpu_render() {
-	const auto clear_color = glm::vec4(0.1f, 0.2f, 0.4f, 1.0f);
-	std::fill(canvas_data.begin(), canvas_data.end(), clear_color);
+void Projection::CPURender() {
+	const auto clearColor = glm::vec4(0.1f, 0.2f, 0.4f, 1.0f);
+	std::fill(canvasData.begin(), canvasData.end(), clearColor);
 
 	for (int i = 0; i < height; i++) {
 		for (int j = 0; j < width; j++) {
-			const auto pos_world = screen_to_world(glm::vec3((float)j + 0.5f, (float)i + 0.5f, 0.0f));
+			const auto posWorld = ScreenToWorld(glm::vec3((float)j + 0.5f, (float)i + 0.5f, 0.0f));
 
-			glm::vec3 ray_dir;
+			glm::vec3 rayDir;
 			if (perspective) {
-				ray_dir = glm::normalize(pos_world - cam_pos);
+				rayDir = glm::normalize(posWorld - camPos);
 			} else {
-				ray_dir = glm::vec3(0.0f, 0.0f, 1.0f);
+				rayDir = glm::vec3(0.0f, 0.0f, 1.0f);
 			}
 
-			canvas_data[i * width + j] = glm::vec4(trace_ray(pos_world, ray_dir), 1.0f);
+			canvasData[i * width + j] = glm::vec4(TraceRay(posWorld, rayDir), 1.0f);
 		}
 	}
 
 	D3D11_MAPPED_SUBRESOURCE resource;
 	context->Map(canvas, 0, D3D11_MAP_WRITE_DISCARD, 0, &resource);
-	memcpy(resource.pData, canvas_data.data(), canvas_data.size() * sizeof(glm::vec4));
+	memcpy(resource.pData, canvasData.data(), canvasData.size() * sizeof(glm::vec4));
 	context->Unmap(canvas, 0);
 }

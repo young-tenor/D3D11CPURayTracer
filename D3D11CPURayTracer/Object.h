@@ -8,7 +8,7 @@ class Object {
 public:
 	virtual ~Object() = default;
 
-	virtual Hit intersect(const Ray &ray) = 0;
+	virtual Hit Intersect(const Ray &ray) = 0;
 
 public:
 	glm::vec3 ambient = glm::vec3(0.1f);

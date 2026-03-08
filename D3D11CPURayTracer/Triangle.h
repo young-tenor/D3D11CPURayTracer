@@ -5,7 +5,7 @@ class Triangle : public Object {
 public:
 	~Triangle() override = default;
 
-	Hit intersect(const Ray &ray) override;
+	Hit Intersect(const Ray &ray) override;
 
 public:
 	glm::vec3 v0;
