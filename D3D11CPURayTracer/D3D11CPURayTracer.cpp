@@ -33,7 +33,7 @@ int main() {
 	const auto reflection = new Reflection();
 	const auto superSampling = new SuperSampling();
 
-	App *app = superSampling;
+	App *app = blinnPhong;
 
 	if (!app->Init(hWnd)) {
 		std::cout << "init() failed." << std::endl;

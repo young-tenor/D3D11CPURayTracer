@@ -212,8 +212,8 @@ glm::vec3 App::TraceRay(const glm::vec3 &pos, const glm::vec3 &dir, const int le
 	}
 
 	const auto lightVec = glm::normalize(light->pos - closestHit.pos);
-	const auto camVec = glm::normalize(-ray.dir);
-	auto color = BlinnPhong(closestHit, lightVec, camVec, light->strength);
+	const auto toEye = glm::normalize(-ray.dir);
+	auto color = BlinnPhong(closestHit, lightVec, toEye, light->strength);
 
 	if (closestHit.obj->reflection > 0.0f) {
 		const glm::vec3 reflectDir = glm::reflect(ray.dir, closestHit.normal);
@@ -262,8 +262,8 @@ glm::vec3 App::TraceRaySuper(const glm::vec3 &pos, const glm::vec3 &dir, const i
 }
 
 // https://en.wikipedia.org/wiki/Blinn%E2%80%93Phong_reflection_model
-glm::vec3 App::BlinnPhong(const Hit &hit, const glm::vec3 &lightDir, const glm::vec3 &camVec, const float lightStrength) {
-	const auto halfway = glm::normalize(lightDir + camVec);
+glm::vec3 App::BlinnPhong(const Hit &hit, const glm::vec3 &lightDir, const glm::vec3 &toEye, const float lightStrength) {
+	const auto halfway = glm::normalize(lightDir + toEye);
 
 	auto ambient = hit.obj->ambient;
 	if (hit.obj->texture) {

@@ -17,7 +17,7 @@ protected:
 	glm::vec3 ScreenToWorld(const glm::vec3 &pos);
 	glm::vec3 TraceRay(const glm::vec3 &pos, const glm::vec3 &dir, const int level = 0);
 	glm::vec3 TraceRaySuper(const glm::vec3 &pos, const glm::vec3 &dir, const int level = 0);
-	glm::vec3 BlinnPhong(const Hit &hit, const glm::vec3 &lightDir, const glm::vec3 &camVec, const float lightStrength);
+	glm::vec3 BlinnPhong(const Hit &hit, const glm::vec3 &lightDir, const glm::vec3 &toEye, const float lightStrength);
 
 protected:
 	HWND hWnd = nullptr;
